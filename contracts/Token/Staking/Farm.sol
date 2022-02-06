@@ -161,12 +161,6 @@ contract WMFChef is Ownable, ReentrancyGuard {
         uint256 multiplier = getMultiplier(pool.lastRewardSecond, block.timestamp);
         uint256 WMFReward = multiplier.mul(WMFPerSecond).mul(pool.allocPoint).div(totalAllocPoint);
         
-        try WMF.pool_mint(devaddr, WMFReward.div(10)) {
-        } catch (bytes memory reason) {
-            WMFReward = 0;
-            emit WMFMintError(reason);
-        }
-        
         try WMF.pool_mint(address(this), WMFReward) {
         } catch (bytes memory reason) {
             WMFReward = 0;
