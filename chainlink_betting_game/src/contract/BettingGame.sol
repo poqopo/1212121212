@@ -13,18 +13,13 @@
  */
 pragma solidity 0.6.6;
 
-import ../contracts/token/We_Made_Future_USD.sol;
+import "./Token/We_Made_Future.sol";
 import "@chainlink/contracts/src/v0.6/VRFConsumerBase.sol";
-import "https://github.com/smartcontractkit/chainlink/blob/develop/contracts/src/v0.6/interfaces/AggregatorV3Interface.sol"; /* !UPDATE, import aggregator contract */
 
 contract BettingGame is VRFConsumerBase {
     
-  /** !UPDATE
-   * 
-   * assign an aggregator contract to the variable.
-   */
-  AggregatorV3Interface internal ethUsd; 
-    
+  We_Made_Future public WMF; 
+
   uint256 internal fee;
   uint256 public randomResult;
   
@@ -40,14 +35,15 @@ contract BettingGame is VRFConsumerBase {
   
   uint256 public gameId;
   uint256 public lastGameId;
-  address payable public admin;
+  address public admin;
   mapping(uint256 => Game) public games;
 
   struct Game{
     uint256 id;
     uint256 bet;
+    uint256 seed;
     uint256 amount;
-    address payable player;
+    address player;
   }
 
   modifier onlyAdmin() {
@@ -67,53 +63,10 @@ contract BettingGame is VRFConsumerBase {
   /**
    * Constructor inherits VRFConsumerBase.
    */
-  constructor() VRFConsumerBase(VFRC_address, LINK_address) public {
+  constructor(We_Made_Future _WMF) VRFConsumerBase(VFRC_address, LINK_address) public {
     fee = 0.1 * 10 ** 18; // 0.1 LINK
     admin = msg.sender;
-    
-    /** !UPDATE
-     * 
-     * assign ETH/USD Rinkeby contract address to the aggregator variable.
-     * more: https://docs.chain.link/docs/ethereum-addresses
-     */
-     
-    ethUsd = AggregatorV3Interface(0x8A753747A1Fa494EC906cE90E9f37563A8AF630e);
-  }
-  
-  /* Allows this contract to receive payments */
-  receive() external payable {
-    emit Received(msg.sender, msg.value);
-  }
-  
-    
-  /** !UPDATE
-   * 
-   * Returns latest ETH/USD price from Chainlink oracles.
-   */
-  function ethInUsd() public view returns (int) {
-    (uint80 roundId, int price, uint startedAt, uint timeStamp, uint80 answeredInRound) = ethUsd.latestRoundData();
-    
-    return price;
-  }
-
-  function wmfINUsd() public view returns(int) {
-    (uint roundId, int price, uint startedAt, uint timestamp, uint80 answerInRound)= WUSD.WMF_price();
-    
-    return price;
-  }
-
-  /** !UPDATE
-   * 
-   * ethUsd - latest price from Chainlink oracles (ETH in USD * 10**8).
-   * weiUsd - USD in Wei, received by dividing:
-   *          ETH in Wei (converted to compatibility with etUsd (10**18 * 10**8)),
-   *          by ethUsd.
-   */
-  function weiInUsd() public view returns (uint) {
-    int wmfUsd = wmfInUsd();
-    int weiUsd = 10**26/wmfUsd;
-    
-    return uint(weiUsd);
+    WMF = _WMF;
   }
   
   /**
@@ -121,24 +74,18 @@ contract BettingGame is VRFConsumerBase {
    * By winning, user 2x his betAmount.
    * Chances to win and lose are the same.
    */
-  function game(uint256 bet, uint256 seed) public payable returns (bool) {
-
-    /** !UPDATE
-     * 
-     * Checking if msg.value is higher or equal than $1.
-    */
-    uint weiUsd = weiInUsd();
-    require(msg.value>=weiUsd, 'Error, msg.value must be >= $1');
-      
+  function game(uint256 amount, uint256 bet, uint256 seed) public returns (bool) {
     //bet=0 is low, refers to 1-3  dice values
     //bet=1 is high, refers to 4-6 dice values
     require(bet<=1, 'Error, accept only 0 and 1');
 
     //vault balance must be at least equal to msg.value
-    require(address(this).balance>=msg.value, 'Error, insufficent vault balance');
+    require(WMF.balanceOf(address(this))>=amount, 'Error, insufficent vault balance');
     
     //each bet has unique id
-    games[gameId] = Game(gameId, bet, seed, msg.value, msg.sender);
+    games[gameId] = Game(gameId, bet, seed, amount, msg.sender);
+
+    WMF.transfer(address(this), amount);
     
     //increase gameId for the next bet
     gameId = gameId+1;
@@ -170,7 +117,7 @@ contract BettingGame is VRFConsumerBase {
   /**
    * Send rewards to the winners.
    */
-  function verdict(uint256 random) public payable onlyVFRC {
+  function verdict(uint256 random) public onlyVFRC {
     //check bets from latest betting round, one by one
     for(uint256 i=lastGameId; i<gameId; i++){
       //reset winAmount for current user
@@ -179,7 +126,8 @@ contract BettingGame is VRFConsumerBase {
       //if user wins, then receives 2x of their betting amount
       if((random>=half && games[i].bet==1) || (random<half && games[i].bet==0)){
         winAmount = games[i].amount*2;
-        games[i].player.transfer(winAmount);
+        address winner = games[i].player;
+        WMF.transferFrom(address(this), winner, winAmount);
       }
       emit Result(games[i].id, games[i].bet, games[i].seed, games[i].amount, games[i].player, winAmount, random, block.timestamp);
     }
@@ -194,19 +142,9 @@ contract BettingGame is VRFConsumerBase {
     require(LINK.transfer(msg.sender, amount), "Error, unable to transfer");
   }
   
-  /**
-   * Withdraw Ether from this contract (admin option).
-   */
-  function withdrawEther(uint256 amount) external payable onlyAdmin {
-    require(address(this).balance>=amount, 'Error, contract has insufficent balance');
-    admin.transfer(amount);
-    
-    emit Withdraw(admin, amount);
-  }
-
-  function withdrawWMF(uint256 amount) external payable onlyAdmin {
-  require(address(this).balance>=amount, 'Error, contract has insufficent balance');
-  admin.transfer(amount);
+  function withdrawWMF(uint256 amount) external  onlyAdmin {
+  require(WMF.balanceOf(address(this))>=amount, 'Error, contract has insufficent balance');
+  WMF.transfer(admin, amount);
 
   emit Withdraw(admin, amount);
 }
