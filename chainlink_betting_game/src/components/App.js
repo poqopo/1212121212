@@ -104,7 +104,7 @@ class App extends Component {
 
       //Send bet to the contract and wait for the verdict
       this.state.wmf.methods.approve('0xb682C6091DEaE7D072b9DF6098218D5c3f438cE8', amount).send({ from: this.state.account }).on('receipt', (receipt) => {
-        this.state.contract.methods.game(amount, bet, randomSeed).send({from: this.state.account}).on('confirmation', (hash) => {
+        this.state.contract.methods.game(amount, bet, randomSeed).send({from: this.state.account}).on('receipt', (receipt) => {
           console.log("send success") 
           this.setState({ loading: true })
           this.state.contract.events.Result({}, async (error, event) => {
