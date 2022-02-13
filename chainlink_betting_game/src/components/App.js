@@ -20,7 +20,6 @@ class App extends Component {
     if(typeof window.ethereum!=='undefined' && !this.state.wrongNetwork){
       let accounts, network, balance, web3, maxBet, minBet, contract, contract_abi, contract_address
 
-
       //don't refresh DApp when user change the network
       window.ethereum.autoRefreshOnNetworkChange = false;
 
@@ -43,11 +42,12 @@ class App extends Component {
       }
       this.setState({ loading: false })
       
-
+      await window.ethereum.enable();
       contract_abi = BettingGame.abi
       contract_address = '0xb682C6091DEaE7D072b9DF6098218D5c3f438cE8' //rinkeby
       contract = new web3.eth.Contract(contract_abi, contract_address);
       accounts = await web3.eth.getAccounts()
+      console.log(accounts[0])
       this.setState({account: accounts[0]})
 
       //Update the data when user initially connect
