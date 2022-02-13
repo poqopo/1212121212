@@ -50,7 +50,7 @@ class Main extends Component {
 
                         if(reg.test(this.props.amount)){
                           const amount = (this.props.amount).toString()
-                          this.props.makeBet(0, amount)
+                          this.props.makeBet(0, this.props.web3.utils.toWei(amount) )
                         } else {
                           window.alert('Please type positive interger or float numbers')
                         }

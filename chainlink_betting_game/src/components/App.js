@@ -103,9 +103,9 @@ class App extends Component {
       var randomSeed = Math.floor(Math.random() * Math.floor(1e9))
 
       //Send bet to the contract and wait for the verdict
-      this.state.wmf.methods.approve('0xb682C6091DEaE7D072b9DF6098218D5c3f438cE8', amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.contract.methods.game(amount, bet, randomSeed).send({from: this.state.account, value: amount}).on('transactionHash', (hash) => {
-          console.alert("send success") 
+      this.state.wmf.methods.approve('0xb682C6091DEaE7D072b9DF6098218D5c3f438cE8', amount).send({ from: this.state.account }).on('receipt', (receipt) => {
+        this.state.contract.methods.game(amount, bet, randomSeed).send({from: this.state.account}).on('confirmation', (hash) => {
+          console.log("send success") 
           this.setState({ loading: true })
           this.state.contract.events.Result({}, async (error, event) => {
             console.log("verdict found")
@@ -119,7 +119,7 @@ class App extends Component {
           //Prevent error when user logout, while waiting for the verdict
             if(this.state.account!==null && typeof this.state.account!=='undefined'){
               const balance = await this.state.wmf.methods.balanceOf(this.state.account).call()
-              const maxBet = await this.state.wmf.methods.balanceOf(this.state.contract_address).call()
+              const maxBet = await this.state.wmf.methods.balanceOf(this.state.contractAddress).call()
               this.setState({ balance: balance, maxBet: maxBet })
             }
             this.setState({ loading: false })
