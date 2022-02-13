@@ -1,13 +1,31 @@
 import React, { Component } from 'react'
 import Web3 from 'web3'
-import WUSDStaablecoin from './abis/WUSDStaablecoin.json'
+import WUSDStablecoin from './abis/WUSDStablecoin.json'
 import We_Made_Future from './abis/We_Made_Future.json'
+import MockDai from './abis/MockDai.json'
 import WUSDPool from './abis/WUSDPool.json'
 import Navbar from './Navbar'
 import Main from './Main'
 import './App.css'
 
 class App extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      account: '0x0',
+      WUSDToken: {},
+      WMFToken: {},
+      MockDaiToken: {},
+      WUSDTokenBalance: '',
+      WMFTokenBalance: '',
+      MockDaiTokenBalance: {},
+      Pool: {},
+      mintPaused: false,
+      redeemPaused: false,
+      loading: true
+    }
+  }
 
   async componentWillMount() {
     await this.loadWeb3()
@@ -22,24 +40,33 @@ class App extends Component {
 
     const networkId = await web3.eth.net.getId()
 
-    // Load WUSDStaablecoin
-    const WUSDStaablecoinData = WUSDStaablecoin.networks[networkId]
-    if(WUSDStaablecoinData) {
-      const WUSDStaablecoin = new web3.eth.Contract(WUSDStaablecoin.abi, WUSDStaablecoinData.address)
-      this.setState({ WUSDStaablecoin })
-      let WUSDStaablecoinBalance = await WUSDStaablecoin.methods.balanceOf(this.state.account).call()
-      this.setState({ WUSDStaablecoinBalance: WUSDStaablecoinBalance.toString() })
+    // Load WUSDStablecoin
+    const WUSDStablecoinData = WUSDStablecoin.networks[networkId]
+    if(WUSDStablecoinData) {
+      const WUSDToken = new web3.eth.Contract(WUSDStablecoin.abi, WUSDStablecoinData.address)
+      this.setState({ WUSDToken })
+      let WUSDTokenBalance = await WUSDToken.methods.balanceOf(this.state.account).call()
+      this.setState({ WUSDTokenBalance: WUSDTokenBalance.toString() })
     } else {
-      window.alert('WUSDStaablecoin contract not deployed to detected network.')
+      window.alert('WUSDStablecoin contract not deployed to detected network.')
+    }
+
+    // Load MockDai
+    const MockDaiData = MockDai.networks[networkId]
+    if(MockDaiData) {
+      const MockDaiToken = new web3.eth.Contract(MockDai.abi, MockDaiData.address)
+      this.setState({ MockDaiToken })
+      let MockDaiTokenBalance = await MockDaiToken.methods.balanceOf(this.state.account).call()
+      this.setState({ MockDaiTokenBalance: MockDaiTokenBalance.toString() })
     }
 
     // Load We_Made_Future
     const We_Made_FutureData = We_Made_Future.networks[networkId]
     if(We_Made_FutureData) {
-      const We_Made_Future = new web3.eth.Contract(We_Made_Future.abi, We_Made_FutureData.address)
-      this.setState({ We_Made_Future })
-      let We_Made_FutureBalance = await We_Made_Future.methods.balanceOf(this.state.account).call()
-      this.setState({ We_Made_FutureBalance: We_Made_FutureBalance.toString() })
+      const WMFToken = new web3.eth.Contract(We_Made_Future.abi, We_Made_FutureData.address)
+      this.setState({ WMFToken })
+      let WMFTokenBalance = await WMFToken.methods.balanceOf(this.state.account).call()
+      this.setState({ WMFTokenBalance: WMFTokenBalance.toString() })
     } else {
       window.alert('We_Made_Future contract not deployed to detected network.')
     }
@@ -47,12 +74,12 @@ class App extends Component {
     // Load WUSDPool
     const WUSDPoolData = WUSDPool.networks[networkId]
     if(WUSDPoolData) {
-      const WUSDPool = new web3.eth.Contract(WUSDPool.abi, WUSDPoolData.address)
-      this.setState({ WUSDPool })
-      let mintPaused = await WUSDPool.methods.mintPaused(this.state.account).call()
-      this.setState({ mintPaused: mintPaused.toString() })
-      let redeemPaused = await WUSDPool.methods.redeemPaused(this.state.account).call()
-      this.setState({ redeemPaused: redeemPaused.toString() })     
+      const Pool = new web3.eth.Contract(WUSDPool.abi, WUSDPoolData.address)
+      this.setState({ Pool })
+      let mintPaused = await Pool.methods.mintPaused().call()
+      this.setState({ mintPaused: mintPaused.toString() }) // Parameter 오류
+      let redeemPaused = await Pool.methods.redeemPaused().call()// Parameter 오류
+      this.setState({ redeemPaused: redeemPaused.toString() }) 
     } else {
       window.alert('WUSDPool contract not deployed to detected network.')
     }
@@ -73,10 +100,25 @@ class App extends Component {
     }
   }
 
+  transferTest = () => {
+    this.setState({loading:true})
+      this.state.WUSDToken.methods.transfer('0xb682C6091DEaE7D072b9DF6098218D5c3f438cE8', window.web3.utils.toWei('100'))
+      .send({from:this.state.account})
+      .on('receipt', (receipt => {
+        this.loadBlockchainData()
+        this.setState({loading: false})
+      }))
+      .on('error', err =>{
+        this.loadBlockchainData()
+        this.setState({loading: false})
+        window.alert("Error났당")
+      })
+  }
+
   mint1t1WUSD = (WMF_amount_d18, WUSD_out_min) => {
     this.setState({ loading: true })
-    this.state.WUSDStaablecoin.methods.approve(this.state.WUSDPool._address, amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.WUSDPool.methods.mint1t1WUSD(WMF_amount_d18, WUSD_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
+    this.state.WUSDToken.methods.approve(this.state.Pool._address, WMF_amount_d18).send({ from: this.state.account }).on('transactionHash', (hash) => {
+      this.state.Pool.methods.mint1t1WUSD(WMF_amount_d18, WUSD_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
         this.setState({ loading: false })
       })
     })
@@ -84,27 +126,42 @@ class App extends Component {
 
   mintAlgorithmicWUSD = (collateral_amount, WUSD_out_min) => {
     this.setState({ loading: true })
-    this.state.WUSDStaablecoin.methods.approve(this.state.WUSDPool._address, amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.WUSDPool.methods.mintAlgorithmicWUSD(collateral_amount, WUSD_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
+    this.state.WUSDToken.methods.approve(this.state.Pool._address, collateral_amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
+      this.state.Pool.methods.mintAlgorithmicWUSD(collateral_amount, WUSD_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
         this.setState({ loading: false })
       })
     })
   }
 
-  mintFractionalWUSD = (collateral_amount, WMF_amount, WUSD_out_min) => {
+  // mock 99.75  wmf 0.25 wusd 100
+  // mock 99.75 wmf many wusd 100
+  // 90 100 1
+  mintFractionalWUSD = (MockDai_amount, WMF_amount, WUSD_out_min) => {
     this.setState({ loading: true })
-    this.state.WUSDStaablecoin.methods.approve(this.state.WUSDPool._address, amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.WUSDPool.methods.mintFractionalWUSD(collateral_amount, WMF_amount, WUSD_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
-        this.setState({ loading: false })
-      })
+    this.state.MockDaiToken.methods.approve(this.state.Pool._address, MockDai_amount).send({from: this.state.account})
+    .on('error',() => {
+      this.loadBlockchainData()
+      this.setState({loading: false})
+      console.log('error남')
     })
+    .on('receipt', () => {
+      this.state.WMFToken.methods.approve(this.state.Pool._address, WMF_amount).send({from: this.state.account}).on('receipt', () =>{
+        this.state.Pool.methods.mintFractionalWUSD(MockDai_amount, WMF_amount, WUSD_out_min).send({from: this.state.account})
+        .on('transactionHash', (hash) => {console.log(hash)})
+        .on('receipt', (receipt) => {
+          console.log(receipt)
+          this.loadBlockchainData()
+          this.setState({loading: false})
+        })
+      }
+    )})
   }
 
   redeem1t1WUSD = (WUSD_amount, COLLATERAL_out_min) => {
     this.setState({ loading: true })
-    this.state.WUSDStaablecoin.methods.approve(this.state.WUSDPool._address, amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.WUSDPool.methods.redeem1t1WUSD(WUSD_amount, COLLATERAL_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
-        this.state.WUSDPool.methods.collectRedemption().send({ from: this.state.account }).on('transactionHash', (hash) => {
+    this.state.WUSDToken.methods.approve(this.state.Pool._address, WUSD_amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
+      this.state.Pool.methods.redeem1t1WUSD(WUSD_amount, COLLATERAL_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
+        this.state.Pool.methods.collectRedemption().send({ from: this.state.account }).on('transactionHash', (hash) => {
           this.setState({ loading: false })
         })
       })
@@ -113,9 +170,9 @@ class App extends Component {
 
   redeemAlgorithmicWUSD = (WUSD_amount, WMF_out_min) => {
     this.setState({ loading: true })
-    this.state.WUSDStaablecoin.methods.approve(this.state.WUSDPool._address, amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.WUSDPool.methods.redeemAlgorithmicWUSD(WUSD_amount, WMF_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
-        this.state.WUSDPool.methods.collectRedemption().send({ from: this.state.account }).on('transactionHash', (hash) => {
+    this.state.WUSDToken.methods.approve(this.state.Pool._address, WUSD_amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
+      this.state.Pool.methods.redeemAlgorithmicWUSD(WUSD_amount, WMF_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
+        this.state.Pool.methods.collectRedemption().send({ from: this.state.account }).on('transactionHash', (hash) => {
           this.setState({ loading: false })
         })
       })
@@ -124,9 +181,9 @@ class App extends Component {
 
   redeemFractionalWUSD = (WUSD_amount, WMF_out_min, COLLATERAL_out_min) => {
     this.setState({ loading: true })
-    this.state.WUSDStaablecoin.methods.approve(this.state.WUSDPool._address, amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.WUSDPool.methods.redeemFractionalWUSD(WUSD_amount, WMF_out_min, COLLATERAL_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
-        this.state.WUSDPool.methods.collectRedemption().send({ from: this.state.account }).on('transactionHash', (hash) => {
+    this.state.WUSDToken.methods.approve(this.state.Pool._address, WUSD_amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
+      this.state.Pool.methods.redeemFractionalWUSD(WUSD_amount, WMF_out_min, COLLATERAL_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
+        this.state.Pool.methods.collectRedemption().send({ from: this.state.account }).on('transactionHash', (hash) => {
           this.setState({ loading: false })
         })
       })
@@ -135,9 +192,9 @@ class App extends Component {
 
   recollateralizeWUSD = (collateral_amount, WMF_out_min) => {
     this.setState({ loading: true })
-    this.state.WUSDStaablecoin.methods.approve(this.state.WUSDPool._address, amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.WUSDPool.methods.recollateralizeWUSD(collateral_amount, WMF_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
-        this.state.WUSDPool.methods.collectRedemption().send({ from: this.state.account }).on('transactionHash', (hash) => {
+    this.state.WUSDToken.methods.approve(this.state.Pool._address, collateral_amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
+      this.state.Pool.methods.recollateralizeWUSD(collateral_amount, WMF_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
+        this.state.Pool.methods.collectRedemption().send({ from: this.state.account }).on('transactionHash', (hash) => {
           this.setState({ loading: false })
         })  
       })
@@ -146,26 +203,16 @@ class App extends Component {
 
   buyBackWMF = (WMF_amount, COLLATERAL_out_min) => {
     this.setState({ loading: true })
-    this.state.WUSDStaablecoin.methods.approve(this.state.WUSDPool._address, amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.WUSDPool.methods.redeemFractionalWUSD(WMF_amount, COLLATERAL_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
-        this.state.WUSDPool.methods.collectRedemption().send({ from: this.state.account }).on('transactionHash', (hash) => {
+    this.state.WUSDToken.methods.approve(this.state.Pool._address, WMF_amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
+      this.state.Pool.methods.redeemFractionalWUSD(WMF_amount, COLLATERAL_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
+        this.state.Pool.methods.collectRedemption().send({ from: this.state.account }).on('transactionHash', (hash) => {
           this.setState({ loading: false })
         })
       })
     })
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      account: '0x0',
-      WUSDStaablecoin: {},
-      We_Made_Future: {},
-      WUSDPool: {},
-      mintPaused: false,
-      loading: true
-    }
-  }
+  
 
   render() {
     let content
@@ -173,11 +220,14 @@ class App extends Component {
       content = <p id="loader" className="text-center">Loading...</p>
     } else {
       content = <Main
-        WUSDStaablecoinBalance={this.state.WUSDStaablecoinBalance}
-        We_Made_FutureBalance={this.state.We_Made_FutureBalance}
+        MockDaiTokenBalance={this.state.MockDaiTokenBalance}
+        WUSDTokenBalance={this.state.WUSDTokenBalance}
+        WMFTokenBalance={this.state.WMFTokenBalance}
         mintPaused={this.state.mintPaused}
         redeemAlgorithmicWUSD={this.redeemAlgorithmicWUSD}
         mintAlgorithmicWUSD={this.mintAlgorithmicWUSD}
+        mintFractionalWUSD={this.mintFractionalWUSD}
+        transferTest={this.transferTest}
       />
     }
 
