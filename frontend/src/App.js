@@ -116,21 +116,10 @@ class App extends Component {
   }
 
   mint1t1WUSD = (WMF_amount_d18, WUSD_out_min) => {
-    this.setState({ loading: true })
-    this.state.WUSDToken.methods.approve(this.state.Pool._address, WMF_amount_d18).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.Pool.methods.mint1t1WUSD(WMF_amount_d18, WUSD_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
-        this.setState({ loading: false })
-      })
-    })
+  
   }
 
   mintAlgorithmicWUSD = (collateral_amount, WUSD_out_min) => {
-    this.setState({ loading: true })
-    this.state.WUSDToken.methods.approve(this.state.Pool._address, collateral_amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.Pool.methods.mintAlgorithmicWUSD(collateral_amount, WUSD_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
-        this.setState({ loading: false })
-      })
-    })
   }
 
   // mock 99.75  wmf 0.25 wusd 100
@@ -158,58 +147,23 @@ class App extends Component {
   }
 
   redeem1t1WUSD = (WUSD_amount, COLLATERAL_out_min) => {
-    this.setState({ loading: true })
-    this.state.WUSDToken.methods.approve(this.state.Pool._address, WUSD_amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.Pool.methods.redeem1t1WUSD(WUSD_amount, COLLATERAL_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
-        this.state.Pool.methods.collectRedemption().send({ from: this.state.account }).on('transactionHash', (hash) => {
-          this.setState({ loading: false })
-        })
-      })
-    })
+  
   }
 
   redeemAlgorithmicWUSD = (WUSD_amount, WMF_out_min) => {
-    this.setState({ loading: true })
-    this.state.WUSDToken.methods.approve(this.state.Pool._address, WUSD_amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.Pool.methods.redeemAlgorithmicWUSD(WUSD_amount, WMF_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
-        this.state.Pool.methods.collectRedemption().send({ from: this.state.account }).on('transactionHash', (hash) => {
-          this.setState({ loading: false })
-        })
-      })
-    })
+
   }
 
   redeemFractionalWUSD = (WUSD_amount, WMF_out_min, COLLATERAL_out_min) => {
-    this.setState({ loading: true })
-    this.state.WUSDToken.methods.approve(this.state.Pool._address, WUSD_amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.Pool.methods.redeemFractionalWUSD(WUSD_amount, WMF_out_min, COLLATERAL_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
-        this.state.Pool.methods.collectRedemption().send({ from: this.state.account }).on('transactionHash', (hash) => {
-          this.setState({ loading: false })
-        })
-      })
-    })
+  
   }
 
   recollateralizeWUSD = (collateral_amount, WMF_out_min) => {
-    this.setState({ loading: true })
-    this.state.WUSDToken.methods.approve(this.state.Pool._address, collateral_amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.Pool.methods.recollateralizeWUSD(collateral_amount, WMF_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
-        this.state.Pool.methods.collectRedemption().send({ from: this.state.account }).on('transactionHash', (hash) => {
-          this.setState({ loading: false })
-        })  
-      })
-    })
+  
   }
 
   buyBackWMF = (WMF_amount, COLLATERAL_out_min) => {
-    this.setState({ loading: true })
-    this.state.WUSDToken.methods.approve(this.state.Pool._address, WMF_amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.Pool.methods.redeemFractionalWUSD(WMF_amount, COLLATERAL_out_min).send({ from: this.state.account }).on('transactionHash', (hash) => {
-        this.state.Pool.methods.collectRedemption().send({ from: this.state.account }).on('transactionHash', (hash) => {
-          this.setState({ loading: false })
-        })
-      })
-    })
+
   }
 
   
@@ -223,10 +177,15 @@ class App extends Component {
         MockDaiTokenBalance={this.state.MockDaiTokenBalance}
         WUSDTokenBalance={this.state.WUSDTokenBalance}
         WMFTokenBalance={this.state.WMFTokenBalance}
-        mintPaused={this.state.mintPaused}
-        redeemAlgorithmicWUSD={this.redeemAlgorithmicWUSD}
+        mint1t1WUSD={this.mint1t1WUSD}
         mintAlgorithmicWUSD={this.mintAlgorithmicWUSD}
         mintFractionalWUSD={this.mintFractionalWUSD}
+        redeem1t1WUSD={this.redeem1t1WUSD}
+        redeemAlgorithmicWUSD={this.redeemAlgorithmicWUSD}
+        redeemFractionalWUSD={this.redeemFractionalWUSD}
+        recollateralizeWUSD={this.recollateralizeWUSD}
+        buyBackWMF={this.buyBackWMF}
+        mintPaused={this.state.mintPaused}
         transferTest={this.transferTest}
       />
     }
