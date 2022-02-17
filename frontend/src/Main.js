@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 
 
 class Main extends Component {
-
   render() {
     return (
       <div id="content" className="mt-3">
+        {this.props.pendingWMF}
 
         <table className="table table-borderless text-muted text-center">
           <thead>
@@ -70,9 +70,10 @@ class Main extends Component {
               </button>
               <div style={{height:100}}></div>
               <button
+                disabled={this.props.collateralRatio < 10000}
                 onClick={event => {
                   event.preventDefault()
-                  this.props.transferTest()
+                  this.props.testFunc()
                 }}
               >
                 TEST
