@@ -8,12 +8,12 @@ class Navbar extends Component {
       <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow text-monospace">
         <a
           className="navbar-brand col-sm-3 col-md-2 mr-0"
-          href="http://www.dappuniversity.com/bootcamp"
           target="_blank"
+          //home으로 리 다이렉 해주게 바꿀까?
           rel="noopener noreferrer"
         >
         <img src={dice_logo} height="32" alt="logo" />
-          B3tt1ng G@m3
+          WMF GAME
         </a>
         {!this.props.account ? <div id="loader" className="spinner-border text-light" role="status"></div> :
           <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
@@ -23,7 +23,7 @@ class Navbar extends Component {
               target="_blank"
               rel="noopener noreferrer"
             >
-              {(this.props.account)}
+              YOUR ACCOUNT:{(this.props.account)}
             </a>&nbsp;
           </li>
         }

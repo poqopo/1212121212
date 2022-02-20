@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import dice from '../logos/dice.webp';
+import dice from '../logos/dice.mp4';
 import eth from '../logos/eth.png';
 import './App.css';
 
@@ -16,11 +16,10 @@ class Main extends Component {
                   <div className="card-body">
                     <div>
                       <a
-                        href="http://www.dappuniversity.com/bootcamp"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <img src={dice} width="225" alt="logo" />
+                        <video src={dice} width="225" alt="logo" />
                       </a>
                     </div>
                     &nbsp;
@@ -36,7 +35,7 @@ class Main extends Component {
                       />
                       <div className="input-group-append">
                         <div className="input-group-text">
-                          <img src={eth} height="20" alt=""/>&nbsp;<b>ETH</b>
+                          <img src={eth} height="20" alt=""/>&nbsp;<b>WMF</b>
                         </div>
                       </div>
                     </div>
@@ -45,7 +44,6 @@ class Main extends Component {
                       className="btn btn-danger btn-lg"
                       onClick={(event) => {
                         event.preventDefault()
-                        //start with digit, digit+dot* or single dot*, end with digit.
                         var reg = new RegExp("^[0-9]*.?[0-9]+$")    
 
                         if(reg.test(this.props.amount)){
@@ -84,21 +82,21 @@ class Main extends Component {
                           <b>MaxBet&nbsp;</b>
                         </div>
                         <div className="float-right" style={{ height: '17px' }}>
-                          {Number(this.props.web3.utils.fromWei((this.props.maxBet).toString())).toFixed(5)} <b>ETH&nbsp;</b>
+                          {Number(this.props.web3.utils.fromWei((this.props.maxBet).toString())).toFixed(5)} <b>WMF&nbsp;</b>
                         </div>                      
                         <br></br>
                         <div className="float-left" style={{ height: '17px' }}>
-                          <b>MinBet</b>($1)&nbsp;
+                          <b>MinBet</b>&nbsp;
                         </div>
                         <div className="float-right" style={{ height: '17px' }}>
-                          {Number(this.props.web3.utils.fromWei((this.props.minBet).toString())).toFixed(5)} <b>ETH&nbsp;</b>
+                          {Number(this.props.web3.utils.fromWei((this.props.minBet).toString())).toFixed(5)} <b>WMF&nbsp;</b>
                         </div>
                         <br></br>
                         <div className="float-left">
                           <b>Balance&nbsp;</b>
                         </div>
                         <div className="float-right">
-                          {Number(this.props.web3.utils.fromWei((this.props.balance).toString())).toFixed(5)} <b>ETH&nbsp;</b>
+                          {Number(this.props.web3.utils.fromWei((this.props.balance).toString())).toFixed(5)} <b>WMF&nbsp;</b>
                         </div>
                       </div>
                     }
