@@ -1,13 +1,18 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@font-face {
+  font-family: 'Jost';
+  font-weight: normal;
+  src: url("./fonts/Jost-Regular.ttf")
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+@font-face {
+  font-family: 'Jost';
+  font-weight: bold;
+  src: url("./fonts/Jost-Bold.ttf")
+}
+
+@font-face {
+  font-family: 'Jost';
+  font-style: italic;
+  font-weight: normal;
+  src: url("./fonts/Jost-Italic.ttf")
 }

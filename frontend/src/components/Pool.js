@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
+import './css/Main.css'
 
 
-class Main extends Component {
+class Pool extends Component {
   render() {
     return (
       <div id="content" className="mt-3">
-        {this.props.pendingWMF}
-
-        <table className="table table-borderless text-muted text-center">
+        <table className="table">
           <thead>
             <tr>
               <th scope="col">MockDai Balance</th>
@@ -34,14 +33,15 @@ class Main extends Component {
                 event.preventDefault()
                 let amount
                 amount = this.input.value.toString()
-                amount = window.web3.utils.toWei(amount, 'Ether')
-                this.props.mintAlgorithmicWUSD(amount)
+                // amount = window.web3.utils.toWei(amount, 'Ether')
+                console.log(amount)
+                // this.props.mintAlgorithmicWUSD(amount)
               }}>
               <div>
                 <label className="float-left"><b>Stake Tokens</b></label>
-                <span className="float-right text-muted">
+                <div className="float-right text-muted">
                   Balance: {window.web3.utils.fromWei(this.props.WUSDTokenBalance, 'Ether')}
-                </span>
+                </div>
               </div>
               <div className="input-group mb-4">
                 <input
@@ -50,43 +50,12 @@ class Main extends Component {
                   className="form-control form-control-lg"
                   placeholder="0"
                   required />
-                <div className="input-group-append">
-                  <div className="input-group-text">
-                  
-                    &nbsp;&nbsp;&nbsp; mDAI
-                  </div>
-                </div>
+               
               </div>
-              <button type="submit" className="btn btn-primary btn-block btn-lg">STAKE!</button>
+              <button type="submit" className="test">Console log text</button>
             </form>
-            <button
-              type="submit"
-              className="btn btn-link btn-block btn-sm"
-              onClick={(event) => {
-                event.preventDefault()
-                this.props.unstakeTokens()
-              }}>
-                UN-STAKE...
-              </button>
-              <div style={{height:100}}></div>
-              <button
-                disabled={this.props.collateralRatio < 10000}
-                onClick={event => {
-                  event.preventDefault()
-                  this.props.testFunc()
-                }}
-              >
-                TEST
-              </button>
-              <div style={{height:100}}></div>
-              <button
-                onClick={event => {
-                  event.preventDefault()
-                  this.props.mintFractionalWUSD(window.web3.utils.toWei('90', 'Ether'), window.web3.utils.toWei('100', 'Ether'), window.web3.utils.toWei('1', 'Ether'))
-                }}
-              >
-                TEST
-              </button>
+            
+              <a href="/" className="button">asdf</a>
           </div>
         </div>
 
@@ -95,4 +64,4 @@ class Main extends Component {
   }
 }
 
-export default Main;
+export default Pool;

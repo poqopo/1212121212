@@ -9,7 +9,10 @@ import WMFWETH_Pair from './abis/WMFWETH_Pair.json'
 import UniswapPairOracle_MDAI_WETH from './abis/UniswapPairOracle_MDAI_WETH.json'
 import UniswapPairOracle_WMF_WETH from './abis/UniswapPairOracle_WMF_WETH.json'
 import UniswapPairOracle_WUSD_WETH from './abis/UniswapPairOracle_WUSD_WETH.json'
-import Main from './Main'
+import { Home, Pool } from './components/Pages'
+import { Routes, Route } from 'react-router-dom'
+import { Container } from 'react-bootstrap'
+import Navigation from './components/Navigation'
 import './App.css'
 
 class App extends Component {
@@ -52,18 +55,21 @@ class App extends Component {
     if(WUSDStablecoinData) {
       const WUSDToken = new web3.eth.Contract(WUSDStablecoin.abi, WUSDStablecoinData.address)
       let WUSDTokenBalance = await WUSDToken.methods.balanceOf(this.state.account).call()
-      let WMFTokenPrice = await WUSDToken.methods.WMF_price().call()
-      let WUSDTokenPrice = await WUSDToken.methods.WUSD_price().call()
-      let ETHPrice = await WUSDToken.methods.eth_usd_price().call()
+
+      /// 오라클 업데이트를 돌려놔야됨!! ///
+
+      // let WMFTokenPrice = await WUSDToken.methods.WMF_price().call()
+      // let WUSDTokenPrice = await WUSDToken.methods.WUSD_price().call()
+      // let ETHPrice = await WUSDToken.methods.eth_usd_price().call()
       this.setState({ 
         WUSDToken: WUSDToken,
         WUSDTokenBalance: WUSDTokenBalance.toString(),
-        WMFTokenPrice: WMFTokenPrice.toString(),
-        WUSDTokenPrice: WUSDTokenPrice.toString(),
-        ETHPrice: ETHPrice.toString()
+        // WMFTokenPrice: WMFTokenPrice.toString(),
+        // WUSDTokenPrice: WUSDTokenPrice.toString(),
+        // ETHPrice: ETHPrice.toString()
       })
     } else {
-      window.alert('WUSDStablecoin contract not deployed to detected network.')
+      window.alert('WUSDToken contract not deployed to detected network.')
     }
 
     // Load MockDai
@@ -340,8 +346,14 @@ class App extends Component {
     if(this.state.loading) {
       content = <p id="loader" className="text-center">Loading...</p>
     } else {
-      content = <Main
-        // Token Data
+
+      content = 
+      <>
+      <Navigation/>
+      <Container>
+      <Routes>
+        <Route path='/' element = {<Home/>}/>
+        <Route path='/pool' element={<Pool
         MockDaiTokenBalance={this.state.MockDaiTokenBalance}
         WUSDTokenBalance={this.state.WUSDTokenBalance}
         WMFTokenBalance={this.state.WMFTokenBalance}
@@ -369,28 +381,18 @@ class App extends Component {
         // Test
         transferTest={this.transferTest}
         testFunc={this.testFunc}
-      />
+        
+        
+        />} />
+      </Routes>
+      </Container>
+
+      </>
     }
 
     return (
       <div>
-        <div className="container-fluid mt-5">
-          <div className="row">
-            <main role="main" className="col-lg-12 ml-auto mr-auto" style={{ maxWidth: '600px' }}>
-              <div className="content mr-auto ml-auto">
-                <a
-                  href="http://www.dappuniversity.com/bootcamp"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                </a>
-
-                {content}
-
-              </div>
-            </main>
-          </div>
-        </div>
+          {content} 
       </div>
     );
   }
