@@ -1,5 +1,6 @@
 import Home from './Home'
 import Pool from './Pool'
+import MintBoxes from './MintBoxes'
 
 
-export { Pool, Home }
+export { Pool, Home, MintBoxes }

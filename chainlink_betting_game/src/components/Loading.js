@@ -16,7 +16,6 @@ class Loading extends Component {
                   <div className="card-body">
                     <div>
                       <a
-                          href="http://www.dappuniversity.com/bootcamp"
                           target="_blank"
                           rel="noopener noreferrer"
                         >

@@ -9,10 +9,13 @@ import WMFWETH_Pair from './abis/WMFWETH_Pair.json'
 import UniswapPairOracle_MDAI_WETH from './abis/UniswapPairOracle_MDAI_WETH.json'
 import UniswapPairOracle_WMF_WETH from './abis/UniswapPairOracle_WMF_WETH.json'
 import UniswapPairOracle_WUSD_WETH from './abis/UniswapPairOracle_WUSD_WETH.json'
-import { Home, Pool } from './components/Pages'
+import BettingGame from './abis/BettingGame.json'
+import { Home, Pool, MintBoxes } from './components/Pages'
 import { Routes, Route } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 import Navigation from './components/Navigation'
+import Game from './components/Game'
+import GameLoading from './components/GameLoading'
 import './App.css'
 
 class App extends Component {
@@ -33,6 +36,9 @@ class App extends Component {
       pendingWMF: "-",
       loading: true
     }
+    this.setState = this.setState.bind(this)
+    this.onChange = this.onChange.bind(this)
+    this.makeBet = this.makeBet.bind(this)
   }
 
   async componentWillMount() {
@@ -150,12 +156,24 @@ class App extends Component {
       window.alert('WUSDTokenOracle contract not deployed to detected network.')
     }
 
+    // Load Game Contract & Set Max/Min bet
+    const BettingGameData = BettingGame.networks[networkId]
+    if(BettingGameData) {
+      const BettingGameContract = new web3.eth.Contract(BettingGame.abi, BettingGameData.address)
+      const bettingGameMaxBet = await this.state.WMFToken.methods.balanceOf(BettingGameData.address).call()
+      const bettingGameMinBet = 1e18
+      this.setState({ BettingGameContract, bettingGameMaxBet, bettingGameMinBet})
+      console.log(this.state.bettingGameMaxBet)
+    } else {
+      window.alert('BettingGame contract not deployed to detected network.')
+    }
     this.setState({ loading: false })
   }
 
   async loadWeb3() {
     if (window.ethereum) {
       window.web3 = new Web3(window.ethereum)
+      this.setState({web3: window.web3})
       await window.ethereum.enable()
     }
     else if (window.web3) {
@@ -166,6 +184,7 @@ class App extends Component {
     }
   }
 
+  // Test Functions
   testFunc = () => {
     this.state.WUSDToken.methods.global_collateral_ratio().call().then((ratio) => {
       console.log(ratio)
@@ -185,6 +204,48 @@ class App extends Component {
         this.setState({loading: false})
         window.alert("Error났당")
       })
+  }
+
+  // Game
+  onChange(value) {
+    this.setState({'amount': value});
+  }
+  makeBet(bet, amount) {
+    //randomSeed - one of the components from which will be generated final random value
+    
+    if(typeof this.state.account !=='undefined' && this.state.account !==null){
+      var randomSeed = Math.floor(Math.random() * Math.floor(1e9))
+
+      //Send bet to the contract and wait for the verdict
+      this.state.WMFToken.methods.approve(this.state.BettingGameContract._address, amount).send({ from: this.state.account })
+      .on('transactionHash', (hash) => {console.log(hash)})
+      .on('receipt', (r1) => {
+        console.log(r1)
+        this.state.BettingGameContract.methods.game(amount, bet, randomSeed).send({from: this.state.account})
+        .on('transactionHash', (hash) => {
+          this.setState({ loading: true })
+          console.log(hash)})
+        .on('r2', (r2) => {
+          console.log(r2)
+          console.log("send success") 
+         
+          this.state.BettingGameContract.events.Result({}, async (error, event) => {
+            console.log("verdict found")
+            const verdict = event.returnValues.winAmount
+            if(verdict === '0') {
+              window.alert('lose :(')
+            } else {
+              window.alert('WIN!')
+            }
+            this.setState({ loading: false })
+          })
+        })
+        }).on('error', (error) => {
+          window.alert('Error')
+        })
+    } else {
+        window.alert('Problem with account or network')
+    }
   }
 
   // Pool
@@ -341,58 +402,77 @@ class App extends Component {
   
 
   render() {
-    let content
-    
-    if(this.state.loading) {
-      content = <p id="loader" className="text-center">Loading...</p>
-    } else {
-
-      content = 
-      <>
-      <Navigation/>
-      <Container>
-      <Routes>
-        <Route path='/' element = {<Home/>}/>
-        <Route path='/pool' element={<Pool
-        MockDaiTokenBalance={this.state.MockDaiTokenBalance}
-        WUSDTokenBalance={this.state.WUSDTokenBalance}
-        WMFTokenBalance={this.state.WMFTokenBalance}
-        WUSDTokenPrice={this.state.WUSDTokenPrice}
-        WMFTokenPrice={this.state.WMFTokenPrice}
-        ETHPrice={this.state.ETHPrice}
-
-        // Pool
-        collateralRatio={this.state.collateralRatio}
-        mint1t1WUSD={this.mint1t1WUSD}
-        mintAlgorithmicWUSD={this.mintAlgorithmicWUSD}
-        mintFractionalWUSD={this.mintFractionalWUSD}
-        redeem1t1WUSD={this.redeem1t1WUSD}
-        redeemAlgorithmicWUSD={this.redeemAlgorithmicWUSD}
-        redeemFractionalWUSD={this.redeemFractionalWUSD}
-        recollateralizeWUSD={this.recollateralizeWUSD}
-        buyBackWMF={this.buyBackWMF}
-        
-        //Farm
-        pendingWMF={this.state.pendingWMF}
-        farmDeposit={this.farmDeposit}
-        farmWithdraw={this.farmWithdraw}
-        farmHarvest={this.farmHarvest}
-
-        // Test
-        transferTest={this.transferTest}
-        testFunc={this.testFunc}
-        
-        
-        />} />
-      </Routes>
-      </Container>
-
-      </>
-    }
-
     return (
       <div>
-          {content} 
+        <Navigation account={this.state.account} WMFTokenBalance={this.state.WMFTokenBalance} WUSDTokenBalance={this.state.WUSDTokenBalance}/>
+        <Container>
+        <Routes>
+          <Route path='/' element = {<Home/>}/>
+          <Route path='/pool/mint' element={
+            <Pool
+            loading={this.state.loading}
+            box={<MintBoxes/>}
+
+            // TokenDatas
+            MockDaiTokenBalance={this.state.MockDaiTokenBalance}
+            WUSDTokenBalance={this.state.WUSDTokenBalance}
+            WMFTokenBalance={this.state.WMFTokenBalance}
+            WUSDTokenPrice={this.state.WUSDTokenPrice}
+            WMFTokenPrice={this.state.WMFTokenPrice}
+            ETHPrice={this.state.ETHPrice}
+
+            // Pool
+            collateralRatio={this.state.collateralRatio}
+            mint1t1WUSD={this.mint1t1WUSD}
+            mintAlgorithmicWUSD={this.mintAlgorithmicWUSD}
+            mintFractionalWUSD={this.mintFractionalWUSD}
+            redeem1t1WUSD={this.redeem1t1WUSD}
+            redeemAlgorithmicWUSD={this.redeemAlgorithmicWUSD}
+            redeemFractionalWUSD={this.redeemFractionalWUSD}
+            recollateralizeWUSD={this.recollateralizeWUSD}
+            buyBackWMF={this.buyBackWMF}
+            
+            //Farm
+            pendingWMF={this.state.pendingWMF}
+            farmDeposit={this.farmDeposit}
+            farmWithdraw={this.farmWithdraw}
+            farmHarvest={this.farmHarvest}
+
+            // Test
+            transferTest={this.transferTest}
+            testFunc={this.testFunc}
+            />
+          } />  
+          <Route path='/game' element={
+            this.state.loading 
+            ? <GameLoading
+                // balance={this.state.WMFTokenBalance}
+                // maxBet={this.state.bettingGameMaxBet}
+                // minBet={this.state.bettingGameMinBet}
+                web3={this.state.web3}
+              />
+            : <Game
+                amount={this.state.amount}
+                balance={this.state.WMFTokenBalance}
+                makeBet={this.makeBet}
+                onChange={this.onChange}
+                maxBet={this.state.bettingGameMaxBet}
+                minBet={this.state.bettingGameMinBet}
+                web3={this.state.web3}
+                loading={this.state.loading}
+              />   
+          }  
+              />
+          <Route path='/swap' element={
+            <h1>COMMING SOON</h1>
+          }   
+          />
+           <Route path='/nft' element={
+            <h1>COMMING SOON</h1>
+          }   
+          />
+        </Routes>
+        </Container>
       </div>
     );
   }
