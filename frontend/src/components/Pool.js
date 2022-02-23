@@ -31,7 +31,7 @@ class Pool extends Component {
         <h1>{this.props.heading}</h1>
         <div className='info_title'>
           <div className='heading'>
-            WUSD Price: {this.props.wusdPrice? this.props.wusdPrice : '---' } ($)
+            WUSD Price: {this.props.WUSDTokenPrice? (+this.props.WUSDTokenPrice/1000000).toFixed(2) : '---' } ($)
           </div>
           <div className='heading'>
             Collateral Ratio: {(+this.props.collateralRatio / 1000000).toFixed(4)}  (Goal: 0.9900)

@@ -1,6 +1,13 @@
 .home { 
     font-family: 'Noto Sans KR';
-    margin: 80px 15% -1em; 
+    margin: 0 15% -1em; 
+    padding-top: 50px;
+
+}
+.home-back{
+    margin: 0;
+    width: 100%;
+    background: linear-gradient(to bottom right, #ffffff, #f6fffe);
 
 }
 .hometitle{

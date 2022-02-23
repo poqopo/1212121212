@@ -29,11 +29,14 @@ class App extends Component {
       MockDaiToken: {},
       WUSDTokenBalance: '-',
       WMFTokenBalance: '-',
+      WUSDTokenPrice: '0',
+      WMFTokenPrice: '0',
+      MockDaiTokenPrice: '0',
       MockDaiTokenBalance: {},
       Pool: {},
       mintPaused: false,
       redeemPaused: false,
-      pendingWMF: "-",
+      userInfo: "-",
       loading: true
     }
     this.setState = this.setState.bind(this)
@@ -45,7 +48,7 @@ class App extends Component {
     await this.loadWeb3()
     await this.loadBlockchainData()
     await this.getCollateralRatio()
-    await this.pendingWMF()
+    await this.userInfo()
   }
 
   async loadBlockchainData() {
@@ -65,15 +68,15 @@ class App extends Component {
 
       /// 오라클 업데이트를 돌려놔야됨!! ///
 
-      // let WMFTokenPrice = await WUSDToken.methods.WMF_price().call()
-      // let WUSDTokenPrice = await WUSDToken.methods.WUSD_price().call()
-      // let ETHPrice = await WUSDToken.methods.eth_usd_price().call()
+      let WMFTokenPrice = await WUSDToken.methods.WMF_price().call()
+      let WUSDTokenPrice = await WUSDToken.methods.WUSD_price().call()
+      let ETHPrice = await WUSDToken.methods.eth_usd_price().call()
       this.setState({ 
         WUSDToken: WUSDToken,
         WUSDTokenBalance: WUSDTokenBalance.toString(),
-        // WMFTokenPrice: WMFTokenPrice.toString(),
-        // WUSDTokenPrice: WUSDTokenPrice.toString(),
-        // ETHPrice: ETHPrice.toString()
+        WMFTokenPrice: WMFTokenPrice.toString(),
+        WUSDTokenPrice: WUSDTokenPrice.toString(),
+        ETHPrice: ETHPrice.toString()
       })
       await this.getCollateralRatio()
     } else {
@@ -128,7 +131,8 @@ class App extends Component {
     const WMFWETH_PairData = WMFWETH_Pair.networks[networkId]
     if(WMFWETH_PairData) {
       const WMF_WETH_Pair = new web3.eth.Contract(WMFWETH_Pair.abi, WMFWETH_PairData.address)
-      this.setState({ WMF_WETH_Pair })
+      let PairTokenBalance = await WMF_WETH_Pair.methods.balanceOf(this.state.account).call()
+      this.setState({ WMF_WETH_Pair, PairTokenBalance })
     } else {
       window.alert('WMF_WETH_Pair contract not deployed to detected network.')
     }
@@ -169,7 +173,6 @@ class App extends Component {
     } else {
       window.alert('BettingGame contract not deployed to detected network.')
     }
-    this.setState({ loading: false })
   }
 
   async loadWeb3() {
@@ -364,9 +367,17 @@ class App extends Component {
   }
   
   // Farm
-  pendingWMF = async () => {
-    let pendingWMF = await this.state.Farm.methods.pendingWMF(0, this.state.account).call()
-    this.setState({pendingWMF})
+  userInfo = async () => {
+    let userInfo = await this.state.Farm.methods.userInfo(0, this.state.account).call()
+    let farmWMFPerSecond = await this.state.Farm.methods.WMFPerSecond().call()
+    let farmInfo = await this.state.Farm.methods.poolInfo(0).call()
+    let {lpSupply} = farmInfo
+    let farmLPSupply = lpSupply
+    const {amount, rewardDebt} = userInfo
+    let farmAmount = amount
+    let farmRewardDebt = rewardDebt
+    this.setState({farmAmount, farmRewardDebt, farmWMFPerSecond, farmLPSupply})
+    this.setState({loading:false})
   }
 
   farmDeposit = (deposit_amount) => {
@@ -383,7 +394,7 @@ class App extends Component {
 
   farmWithdraw = (withrdaw_amount) => {
     this.setState({loading:true})
-    this.state.Farm.methods.withdraw(0, withrdaw_amount).on('receipt', (r1) => {
+    this.state.Farm.methods.withdraw(0, withrdaw_amount).send({from: this.state.account}).on('receipt', (r1) => {
       console.log(r1)
       this.loadBlockchainData()
       this.setState({loading: false})
@@ -392,7 +403,7 @@ class App extends Component {
 
   farmHarvest = () => {
     this.setState({loading:true})
-    this.state.Farm.methods.withdraw(0, 0).on('receipt', (r1) => {
+    this.state.Farm.methods.withdraw(0, 0).send({from: this.state.account}).on('receipt', (r1) => {
       console.log(r1)
       this.loadBlockchainData()
       this.setState({loading: false})
@@ -485,15 +496,16 @@ class App extends Component {
           <Route path='/swap' element={<ComingSoon/>}/>
           <Route path='/farm' element={
           <Farm heading='FARM' loading={this.state.loading}
-          box={<FarmBox 
-            collateralRatio={this.state.collateralRatio}
-            pendingWMF={this.state.pendingWMF}
+          box={<FarmBox
+            WMFTokenPrice={this.state.WMFTokenPrice}
+            PairTokenBalance={this.state.PairTokenBalance}
+            farmWMFPerSecond={this.state.farmWMFPerSecond}
+            farmLPSupply={this.state.farmLPSupply}
+            farmAmount={this.state.farmAmount}
+            farmRewardDebt={this.state.farmRewardDebt}
             farmDeposit={this.farmDeposit}
             farmWithdraw={this.farmWithdraw}
             farmHarvest={this.farmHarvest}
-            MockDaiTokenBalance={this.state.MockDaiTokenBalance}
-            WUSDTokenBalance={this.state.WUSDTokenBalance}
-            WMFTokenBalance={this.state.WMFTokenBalance}
             />}
           />
           }/>

@@ -8,7 +8,22 @@ class Farm extends Component {
     let content
     let box = this.props.box
     if (this.props.loading){
-      content = <div id="loader">Loading...</div>
+      content =  <div style={{
+        display:'flex',
+        flexDirection:'column',
+        height:'100vh',
+        width:'100%',
+        justifyContent:'center',
+        alignItems:'center',
+        fontSize:'3rem',
+        color:'#fff'
+    }}>
+       Loading...
+        <div style={{
+            fontSize:'1.2rem',  
+            marginTop: '20px'
+        }}> Fetching Blockchain Data...</div>
+    </div>
     }
     else{
       content = 

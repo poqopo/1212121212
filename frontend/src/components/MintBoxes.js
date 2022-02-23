@@ -4,7 +4,6 @@ import './css/MintBoxes.css'
 const MintBoxes = (props) => {
     //props will be collateral ratio
     let WMFTokenBalance = Number(window.web3.utils.fromWei(props.WMFTokenBalance, 'Ether')).toFixed(2)
-    let WUSDTokenBalance = Number(window.web3.utils.fromWei(props.WUSDTokenBalance, 'Ether')).toFixed(2)
     let MockDaiTokenBalance = Number(window.web3.utils.fromWei(props.MockDaiTokenBalance, 'Ether')).toFixed(2)
     let amount1 = 0;
     let minAmount1 = 0;

@@ -2,11 +2,12 @@ import React from 'react'
 import './css/Home.css'
 const Home = () => {
     return(
+        <div className='home-back'>
         <div className='home'>
-           <h2 className="hometitle">We Made future</h2>
+           <h2 className="hometitle">We Made Future</h2>
             <br></br>
             <br></br>
-           <p >위메이드에는 다양한 블록체인 게임들이 있습니다. 하지만 지금은 해당 게임들이 
+           <p>위메이드에는 다양한 블록체인 게임들이 있습니다. 하지만 지금은 해당 게임들이 
                연결되어 있지 않고 각각 개별적으로 운영되고 있습니다. 
                위메이드가 더욱 많은 유저층을 유입시키고 그 유저들을 놓치지 않으려면 
                각 게임들을 하나로 묶고 게임 내 및 게임 간 다양한 서비스를 제공할 수 있는 프로토콜이 있어야 합니다. We_Made_Future는 Defi를 토대로 
@@ -32,6 +33,7 @@ const Home = () => {
             <br></br>
             <br></br>
             <br></br>
+        </div>
         </div>
     ) 
 }
