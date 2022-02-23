@@ -20,7 +20,6 @@ class App extends Component {
     if(typeof window.ethereum!=='undefined' && !this.state.wrongNetwork){
       let accounts, network, balance, web3, maxBet, minBet, contract, contract_abi, contract_address
 
-
       //don't refresh DApp when user change the network
       window.ethereum.autoRefreshOnNetworkChange = false;
 
@@ -43,11 +42,12 @@ class App extends Component {
       }
       this.setState({ loading: false })
       
-
-      contract_abi = [{"inputs":[{"internalType":"contract We_Made_Future","name":"_WMF","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Received","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"bet","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"randomSeed","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"address","name":"player","type":"address"},{"indexed":false,"internalType":"uint256","name":"winAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"randomResult","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"time","type":"uint256"}],"name":"Result","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"admin","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Withdraw","type":"event"},{"inputs":[],"name":"WMF","outputs":[{"internalType":"contract We_Made_Future","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"admin","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"bet","type":"uint256"},{"internalType":"uint256","name":"seed","type":"uint256"}],"name":"game","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"gameId","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"games","outputs":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"uint256","name":"bet","type":"uint256"},{"internalType":"uint256","name":"seed","type":"uint256"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"player","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"lastGameId","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"randomResult","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"requestId","type":"bytes32"},{"internalType":"uint256","name":"randomness","type":"uint256"}],"name":"rawFulfillRandomness","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"random","type":"uint256"}],"name":"verdict","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawLink","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawWMF","outputs":[],"stateMutability":"nonpayable","type":"function"}]
-      contract_address = '0x703da74aB411f6a7fa9558939d20045e4D839C76' //rinkeby
+      await window.ethereum.enable();
+      contract_abi = BettingGame.abi
+      contract_address = '0xb682C6091DEaE7D072b9DF6098218D5c3f438cE8' //rinkeby
       contract = new web3.eth.Contract(contract_abi, contract_address);
       accounts = await web3.eth.getAccounts()
+      console.log(accounts[0])
       this.setState({account: accounts[0]})
 
       //Update the data when user initially connect
@@ -57,7 +57,6 @@ class App extends Component {
             minBet = 1e18
         this.setState({account: accounts[0], balance: balance, minBet: minBet, maxBet: maxBet})
       }
-
       this.setState({
         contract: contract,
         contractAddress: contract_address
@@ -104,8 +103,8 @@ class App extends Component {
       var randomSeed = Math.floor(Math.random() * Math.floor(1e9))
 
       //Send bet to the contract and wait for the verdict
-      this.state.contract.methods.game(amount, bet, randomSeed).send({from: this.state.account, value: amount}).on('transactionHash', (hash) => {
-        this.state.wmf.methods.approve('0x703da74aB411f6a7fa9558939d20045e4D839C76', amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
+      this.state.wmf.methods.approve('0xb682C6091DEaE7D072b9DF6098218D5c3f438cE8', amount).send({ from: this.state.account }).on('receipt', (receipt) => {
+        this.state.contract.methods.game(amount, bet, randomSeed).send({from: this.state.account}).on('receipt', (receipt) => {
           console.log("send success") 
           this.setState({ loading: true })
           this.state.contract.events.Result({}, async (error, event) => {
@@ -120,7 +119,7 @@ class App extends Component {
           //Prevent error when user logout, while waiting for the verdict
             if(this.state.account!==null && typeof this.state.account!=='undefined'){
               const balance = await this.state.wmf.methods.balanceOf(this.state.account).call()
-              const maxBet = await this.state.wmf.methods.balanceOf(this.state.contract_address).call()
+              const maxBet = await this.state.wmf.methods.balanceOf(this.state.contractAddress).call()
               this.setState({ balance: balance, maxBet: maxBet })
             }
             this.setState({ loading: false })
