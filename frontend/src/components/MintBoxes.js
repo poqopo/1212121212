@@ -3,7 +3,9 @@ import './css/MintBoxes.css'
 
 const MintBoxes = (props) => {
     //props will be collateral ratio
-    console.log(+props.collateralRatio)
+    let WMFTokenBalance = Number(window.web3.utils.fromWei(props.WMFTokenBalance, 'Ether')).toFixed(2)
+    let WUSDTokenBalance = Number(window.web3.utils.fromWei(props.WUSDTokenBalance, 'Ether')).toFixed(2)
+    let MockDaiTokenBalance = Number(window.web3.utils.fromWei(props.MockDaiTokenBalance, 'Ether')).toFixed(2)
     let amount1 = 0;
     let minAmount1 = 0;
     let amount2wmf = 0;
@@ -19,23 +21,23 @@ const MintBoxes = (props) => {
                 <div className='form-div'>
                 <form onSubmit={(event) => {
                 event.preventDefault()
-                let amountInEth = window.web3.utils.toWei(amount1.toString(), 'Ether')
-                let minAmountIntEth = window.web3.utils.toWei(minAmount1.toString(), 'Ether')
-                console.log(amountInEth)
-                console.log(minAmountIntEth)
+                let amount1InEth = window.web3.utils.toWei(amount1.toString(), 'Ether')
+                let minAmount1InEth = window.web3.utils.toWei(minAmount1.toString(), 'Ether')
+                props.mint1t1WUSD(amount1InEth, minAmount1InEth)
               }}>
                     <div className='form-text'>Amount(DAI): </div>
                     <input
                     type="number"
-                    step="10"
+                    step="0.01"
                     min={0}
+                    max={MockDaiTokenBalance}
                     onChange={(i) => amount1 = i.target.value}
                     placeholder="0"
                     required />
                     <hr/>
                     <div className='form-text'>Min Receive(WUSD): </div>
                     <input type="number"
-                    step="10"
+                    step=""
                     min={0}
                     onChange={(i)=> minAmount1 = i.target.value}
                     placeholder="0"
@@ -49,33 +51,34 @@ const MintBoxes = (props) => {
                 <div className='form-div'>
                 <form onSubmit={(event) => {
                 event.preventDefault()
-                let WMFAmountInEth = window.web3.utils.toWei(amount2wmf.toString(), 'Ether')
-                let MDAIAmountInEth = window.web3.utils.toWei(amount2mdai.toString(), 'Ether')
-                let minAmountIntEth = window.web3.utils.toWei(minAmount2.toString(), 'Ether')
-                console.log(WMFAmountInEth)
-                console.log(MDAIAmountInEth)
-                console.log(minAmountIntEth)
+                let WMFAmount2InEth = window.web3.utils.toWei(amount2wmf.toString(), 'Ether')
+                let MDAIAmount2InEth = window.web3.utils.toWei(amount2mdai.toString(), 'Ether')
+                let minAmount2InEth = window.web3.utils.toWei(minAmount2.toString(), 'Ether')
+                console.log(WMFAmount2InEth, MDAIAmount2InEth, minAmount2InEth)
+                props.mintFractionalWUSD(MDAIAmount2InEth, WMFAmount2InEth, minAmount2InEth)
                 }}>
                     <div className='form-text'>Amount(DAI): </div>
                     <input
                     type="number"
-                    step="10"
+                    step="0.01"
                     min={0}
+                    max={MockDaiTokenBalance}
                     onChange={(i) => amount2mdai = i.target.value}
                     placeholder="0"
                     required />
             
                     <div className='form-text'>Amount(WMF): </div>
                     <input type="number"
-                    step="10"
+                    step="0.01"
                     min={0}
+                    max={WMFTokenBalance}
                     onChange={(i)=> amount2wmf = i.target.value}
                     placeholder="0"
                     required/>
                     <hr/>
                     <div className='form-text'>Min Receive(WUSD): </div>
                     <input type="number"
-                    step="10"
+                    step="0.01"
                     min={0}
                     onChange={(i)=> minAmount2 = i.target.value}
                     placeholder="0"
@@ -89,23 +92,23 @@ const MintBoxes = (props) => {
                 <div className='form-div'>
                 <form onSubmit={(event) => {
                 event.preventDefault()
-                let amountInEth = window.web3.utils.toWei(amount3.toString(), 'Ether')
-                let minAmountIntEth = window.web3.utils.toWei(minAmount3.toString(), 'Ether')
-                console.log(amountInEth)
-                console.log(minAmountIntEth)
+                let amount3InEth = window.web3.utils.toWei(amount3.toString(), 'Ether')
+                let minAmount3InEth = window.web3.utils.toWei(minAmount3.toString(), 'Ether')
+                props.mintAlgorithmicWUSD(amount3InEth,minAmount3InEth)
                 }}>
                     <div className='form-text'>Amount(WMF): </div>
                     <input
                     type="number"
-                    step="10"
+                    step="0.01"
                     min={0}
+                    max={WMFTokenBalance}
                     onChange={(i) => amount3 = i.target.value}
                     placeholder="0"
                     required />
                     <hr/>
                     <div className='form-text'>Min Receive(WUSD): </div>
                     <input type="number"
-                    step="10"
+                    step="0.01"
                     min={0}
                     onChange={(i)=> minAmount3 = i.target.value}
                     placeholder="0"

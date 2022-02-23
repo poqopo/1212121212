@@ -7,7 +7,7 @@ class Game extends Component {
 
   render() {
     return (
-      <div className='bg'>
+      <div className='bgs'>
         <Container>
       <div className="container-fluid mt-1 col-m-4" style={{ maxWidth: '550px' }}>
         <div className="col-sm ">
@@ -15,7 +15,7 @@ class Game extends Component {
             <div className="content mr-auto ml-auto">
               <div id="content" className="mt-1" >
                 <div className="card mb-4 bg-dark">
-                  <div className="card-body" style={{backgroundColor :'#0CADA7'}} >
+                  <div className="card-body" style={{backgroundColor :'#0CADA7', borderRadius:'10px 10px 0 0'}} >
                     <div>
                       <a
                         target="_blank"
@@ -77,7 +77,7 @@ class Game extends Component {
                         High
                     </button>
                   </div>
-                  <div style={{backgroundColor :'#0CADA7'}}>
+                  <div style={{backgroundColor :'#0CADA7', borderRadius:'0 0 10px 10px', fontSize:'1.2rem', display:'flex', justifyContent:'center', paddingBottom:'20px'}}>
                     {!this.props.balance ? <div id="loader" className="spinner-border float-right" role="status"></div> :
                       <div className="float-right" style={{ width: '220px' }}>
                         <div className="float-left" style={{ height: '17px'}}>

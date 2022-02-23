@@ -2,8 +2,8 @@ import React from 'react'
 import './css/OtherBoxes.css'
 
 const OtherBoxes = (props) => {
-    //props will be collateral ratio
-    console.log(+props.collateralRatio)
+    let MockDaiTokenBalance = Number(window.web3.utils.fromWei(props.MockDaiTokenBalance, 'Ether')).toFixed(2)
+    let WMFTokenBalance = Number(window.web3.utils.fromWei(props.WMFTokenBalance, 'Ether')).toFixed(2)
     let amount1 = 0;
     let minAmount1 = 0;
     let amount3 = 0;
@@ -16,22 +16,22 @@ const OtherBoxes = (props) => {
                 <form onSubmit={(event) => {
                 event.preventDefault()
                 let amountInEth = window.web3.utils.toWei(amount1.toString(), 'Ether')
-                let minAmountIntEth = window.web3.utils.toWei(minAmount1.toString(), 'Ether')
-                console.log(amountInEth)
-                console.log(minAmountIntEth)
+                let minAmountInEth = window.web3.utils.toWei(minAmount1.toString(), 'Ether')
+                props.recollateralizeWUSD(amountInEth, minAmountInEth)
               }}>
                     <div className='form-text'>Amount(DAI): </div>
                     <input
                     type="number"
-                    step="10"
+                    step="0.01"
                     min={0}
+                    max={MockDaiTokenBalance}
                     onChange={(i) => amount1 = i.target.value}
                     placeholder="0"
                     required />
                     <hr/>
                     <div className='form-text'>Min Receive(WMF): </div>
                     <input type="number"
-                    step="10"
+                    step="0.01"
                     min={0}
                     onChange={(i)=> minAmount1 = i.target.value}
                     placeholder="0"
@@ -46,27 +46,27 @@ const OtherBoxes = (props) => {
                 <form onSubmit={(event) => {
                 event.preventDefault()
                 let amountInEth = window.web3.utils.toWei(amount3.toString(), 'Ether')
-                let minAmountIntEth = window.web3.utils.toWei(minAmount3.toString(), 'Ether')
-                console.log(amountInEth)
-                console.log(minAmountIntEth)
+                let minAmountInEth = window.web3.utils.toWei(minAmount3.toString(), 'Ether')
+                props.buyBackWMF(amountInEth, minAmountInEth)
                 }}>
                     <div className='form-text'>Amount(WMF): </div>
                     <input
                     type="number"
-                    step="10"
+                    step="0.01"
                     min={0}
+                    max={WMFTokenBalance}
                     onChange={(i) => amount3 = i.target.value}
                     placeholder="0"
                     required />
                     <hr/>
                     <div className='form-text'>Min Receive(DAI): </div>
                     <input type="number"
-                    step="10"
+                    step="0.01"
                     min={0}
                     onChange={(i)=> minAmount3 = i.target.value}
                     placeholder="0"
                     required/>
-                <button type="submit" className="button" >BUYBACK</button>
+                <button type="submit" className="button"disabled={!(+props.collateralRatio > 1000000)}>{+props.collateralRatio > 1000000? 'BUYBACK' : 'DISABLED'}</button>
                 </form>
                 </div>
             </div>

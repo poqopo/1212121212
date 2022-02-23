@@ -1,4 +1,4 @@
-.bg {
+.bgs {
 	/* background-color: #292929; */
 	/* background: repeating-linear-gradient(
 		30deg,
@@ -8,5 +8,9 @@
 		#303030 60px
 	); */
 	background: linear-gradient(to bottom right, #292929, #0e504e);;
-	height: 100%
+	height: 100%;
+	margin:0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }

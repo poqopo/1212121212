@@ -289,14 +289,13 @@ class App extends Component {
     .on('error',() => {
       this.loadBlockchainData()
       this.setState({loading: false})
-      console.log('error남')
+      console.log('error')
     })
-    .on('receipt', () => {
-      this.state.WMFToken.methods.approve(this.state.Pool._address, WMF_amount).send({from: this.state.account}).on('receipt', () =>{
+    .on('receipt', (r1) => {
+      this.state.WMFToken.methods.approve(this.state.Pool._address, WMF_amount).send({from: this.state.account}).on('receipt', (r2) =>{
         this.state.Pool.methods.mintFractionalWUSD(MockDai_amount, WMF_amount, WUSD_out_min).send({from: this.state.account})
         .on('transactionHash', (hash) => {console.log(hash)})
         .on('receipt', (receipt) => {
-          console.log(receipt)
           this.loadBlockchainData()
           this.setState({loading: false})
         })
@@ -413,108 +412,54 @@ class App extends Component {
             <Pool
             heading='MINT'
             loading={this.state.loading}
-            box={<MintBoxes collateralRatio={this.state.collateralRatio}/>}
-
-            // TokenDatas
-            MockDaiTokenBalance={this.state.MockDaiTokenBalance}
-            WUSDTokenBalance={this.state.WUSDTokenBalance}
-            WMFTokenBalance={this.state.WMFTokenBalance}
             WUSDTokenPrice={this.state.WUSDTokenPrice}
             WMFTokenPrice={this.state.WMFTokenPrice}
-            ETHPrice={this.state.ETHPrice}
-
-            // Pool
             collateralRatio={this.state.collateralRatio}
-            mint1t1WUSD={this.mint1t1WUSD}
-            mintAlgorithmicWUSD={this.mintAlgorithmicWUSD}
-            mintFractionalWUSD={this.mintFractionalWUSD}
-            redeem1t1WUSD={this.redeem1t1WUSD}
-            redeemAlgorithmicWUSD={this.redeemAlgorithmicWUSD}
-            redeemFractionalWUSD={this.redeemFractionalWUSD}
-            recollateralizeWUSD={this.recollateralizeWUSD}
-            buyBackWMF={this.buyBackWMF}
-            
-            //Farm
-            pendingWMF={this.state.pendingWMF}
-            farmDeposit={this.farmDeposit}
-            farmWithdraw={this.farmWithdraw}
-            farmHarvest={this.farmHarvest}
+            box={<MintBoxes 
+              collateralRatio={this.state.collateralRatio}
+              mint1t1WUSD={this.mint1t1WUSD}
+              mintAlgorithmicWUSD={this.mintAlgorithmicWUSD}
+              mintFractionalWUSD={this.mintFractionalWUSD}
+              MockDaiTokenBalance={this.state.MockDaiTokenBalance}
+              WUSDTokenBalance={this.state.WUSDTokenBalance}
+              WMFTokenBalance={this.state.WMFTokenBalance}
+              />}
 
-            // Test
-            transferTest={this.transferTest}
-            testFunc={this.testFunc}
             />
           } />
           <Route path='/pool/redeem' element={
             <Pool
             heading='REDEEM'
             loading={this.state.loading}
-            box={<RedeemBoxes collateralRatio={this.state.collateralRatio}/>}
-
-            // TokenDatas
-            MockDaiTokenBalance={this.state.MockDaiTokenBalance}
-            WUSDTokenBalance={this.state.WUSDTokenBalance}
-            WMFTokenBalance={this.state.WMFTokenBalance}
             WUSDTokenPrice={this.state.WUSDTokenPrice}
             WMFTokenPrice={this.state.WMFTokenPrice}
-            ETHPrice={this.state.ETHPrice}
-
-            // Pool
             collateralRatio={this.state.collateralRatio}
-            mint1t1WUSD={this.mint1t1WUSD}
-            mintAlgorithmicWUSD={this.mintAlgorithmicWUSD}
-            mintFractionalWUSD={this.mintFractionalWUSD}
-            redeem1t1WUSD={this.redeem1t1WUSD}
-            redeemAlgorithmicWUSD={this.redeemAlgorithmicWUSD}
-            redeemFractionalWUSD={this.redeemFractionalWUSD}
-            recollateralizeWUSD={this.recollateralizeWUSD}
-            buyBackWMF={this.buyBackWMF}
-            
-            //Farm
-            pendingWMF={this.state.pendingWMF}
-            farmDeposit={this.farmDeposit}
-            farmWithdraw={this.farmWithdraw}
-            farmHarvest={this.farmHarvest}
-
-            // Test
-            transferTest={this.transferTest}
-            testFunc={this.testFunc}
+            box={<RedeemBoxes 
+              collateralRatio={this.state.collateralRatio}
+              MockDaiTokenBalance={this.state.MockDaiTokenBalance}
+              WUSDTokenBalance={this.state.WUSDTokenBalance}
+              WMFTokenBalance={this.state.WMFTokenBalance}
+              redeem1t1WUSD={this.redeem1t1WUSD}
+              redeemAlgorithmicWUSD={this.redeemAlgorithmicWUSD}
+              redeemFractionalWUSD={this.redeemFractionalWUSD}
+              />}          
             />
           } />  
           <Route path='/pool/others' element={
             <Pool
             heading='RECOLLATERALIZE/BUYBACK'
             loading={this.state.loading}
-            box={<OtherBoxes collateralRatio={this.state.collateralRatio}/>}
-
-            // TokenDatas
-            MockDaiTokenBalance={this.state.MockDaiTokenBalance}
-            WUSDTokenBalance={this.state.WUSDTokenBalance}
-            WMFTokenBalance={this.state.WMFTokenBalance}
             WUSDTokenPrice={this.state.WUSDTokenPrice}
             WMFTokenPrice={this.state.WMFTokenPrice}
-            ETHPrice={this.state.ETHPrice}
-
-            // Pool
             collateralRatio={this.state.collateralRatio}
-            mint1t1WUSD={this.mint1t1WUSD}
-            mintAlgorithmicWUSD={this.mintAlgorithmicWUSD}
-            mintFractionalWUSD={this.mintFractionalWUSD}
-            redeem1t1WUSD={this.redeem1t1WUSD}
-            redeemAlgorithmicWUSD={this.redeemAlgorithmicWUSD}
-            redeemFractionalWUSD={this.redeemFractionalWUSD}
-            recollateralizeWUSD={this.recollateralizeWUSD}
-            buyBackWMF={this.buyBackWMF}
-            
-            //Farm
-            pendingWMF={this.state.pendingWMF}
-            farmDeposit={this.farmDeposit}
-            farmWithdraw={this.farmWithdraw}
-            farmHarvest={this.farmHarvest}
-
-            // Test
-            transferTest={this.transferTest}
-            testFunc={this.testFunc}
+            box={<OtherBoxes 
+              MockDaiTokenBalance={this.state.MockDaiTokenBalance}
+              WUSDTokenBalance={this.state.WUSDTokenBalance}
+              WMFTokenBalance={this.state.WMFTokenBalance}
+              collateralRatio={this.state.collateralRatio}
+              recollateralizeWUSD={this.recollateralizeWUSD}
+              buyBackWMF={this.buyBackWMF}
+              />}
             />
           } />  
           <Route path='/game' element={
@@ -540,7 +485,16 @@ class App extends Component {
           <Route path='/swap' element={<ComingSoon/>}/>
           <Route path='/farm' element={
           <Farm heading='FARM' loading={this.state.loading}
-          box={<FarmBox collateralRatio={this.state.collateralRatio}/>}
+          box={<FarmBox 
+            collateralRatio={this.state.collateralRatio}
+            pendingWMF={this.state.pendingWMF}
+            farmDeposit={this.farmDeposit}
+            farmWithdraw={this.farmWithdraw}
+            farmHarvest={this.farmHarvest}
+            MockDaiTokenBalance={this.state.MockDaiTokenBalance}
+            WUSDTokenBalance={this.state.WUSDTokenBalance}
+            WMFTokenBalance={this.state.WMFTokenBalance}
+            />}
           />
           }/>
           <Route path='/nft' element={<ComingSoon/>}/>

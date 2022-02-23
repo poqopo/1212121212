@@ -6,7 +6,7 @@ class GameLoading extends Component {
 
   render() {
     return (
-      <div className='bg'>
+      <div className='bgs'>
       <Container>
       <div className="container-fluid mt col-m-4" style={{ maxWidth: '550px' }}>
         <div className="col-sm">
@@ -14,7 +14,7 @@ class GameLoading extends Component {
             <div className="content mr-auto ml-auto">
               <div id="content" className="mt-3">
                 <div className="card mb-4 bg-dark">
-                  <div className="card-body" style={{backgroundColor :'#0CADA7'}}> 
+                  <div className="card-body" style={{backgroundColor :'#0CADA7', borderRadius:'10px'}}> 
                     <div>
                       <a
                           target="_blank"
