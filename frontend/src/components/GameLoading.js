@@ -13,7 +13,7 @@ class GameLoading extends Component {
           <main role="main" className="col-lg-12 text-monospace text-center text-white">
             <div className="content mr-auto ml-auto">
               <div id="content" className="mt-3">
-                <div className="card mb-4 bg-dark border-danger">
+                <div className="card mb-4 bg-dark">
                   <div className="card-body">
                     <div>
                       <a
@@ -54,32 +54,6 @@ class GameLoading extends Component {
                       }}>
                         High
                     </button>
-                  </div>
-                  <div>
-                    {!this.props.balance ? <div id="loader" className="spinner-border float-right" role="status"></div> :
-                      <div className="float-right" style={{ width: '220px' }}>
-                        <div className="float-left" style={{ height: '17px' }}>
-                          <b>MaxBet&nbsp;</b>
-                        </div>
-                        <div className="float-right" style={{ height: '17px' }}>
-                          {Number(this.props.web3.utils.fromWei((this.props.maxBet).toString())).toFixed(5)} <b>WMF&nbsp;</b>
-                        </div>                      
-                        <br></br>
-                        <div className="float-left" style={{ height: '17px' }}>
-                          <b>MinBet</b>($1)&nbsp;
-                        </div>
-                        <div className="float-right" style={{ height: '17px' }}>
-                          {Number(this.props.web3.utils.fromWei((this.props.minBet).toString())).toFixed(5)} <b>WMF&nbsp;</b>
-                        </div>
-                        <br></br>
-                        <div className="float-left">
-                          <b>Balance&nbsp;</b>
-                        </div>
-                        <div className="float-right">
-                          {Number(this.props.web3.utils.fromWei((this.props.balance).toString())).toFixed(5)} <b>WMF&nbsp;</b>
-                        </div>
-                      </div>
-                    }
                   </div>
                 </div>
               </div>

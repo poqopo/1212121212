@@ -10,12 +10,12 @@ class Game extends Component {
       <div className='bg'>
         <Container>
       <div className="container-fluid mt-1 col-m-4" style={{ maxWidth: '550px' }}>
-        <div className="col-sm">
+        <div className="col-sm ">
           <main role="main" className="col-lg-12 text-monospace text-center text-white">
             <div className="content mr-auto ml-auto">
-              <div id="content" className="mt" >
+              <div id="content" className="mt-1" >
                 <div className="card mb-4 bg-dark">
-                  <div className="card-body">
+                  <div className="card-body" >
                     <div>
                       <a
                         target="_blank"
@@ -80,7 +80,7 @@ class Game extends Component {
                   <div>
                     {!this.props.balance ? <div id="loader" className="spinner-border float-right" role="status"></div> :
                       <div className="float-right" style={{ width: '220px' }}>
-                        <div className="float-left" style={{ height: '17px' }}>
+                        <div className="float-left" style={{ height: '17px'}}>
                           <b>MaxBet&nbsp;</b>
                         </div>
                         <div className="float-right" style={{ height: '17px' }}>
