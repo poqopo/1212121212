@@ -15,7 +15,7 @@ class Game extends Component {
             <div className="content mr-auto ml-auto">
               <div id="content" className="mt-1" >
                 <div className="card mb-4 bg-dark">
-                  <div className="card-body" >
+                  <div className="card-body" style={{backgroundColor :'#0CADA7'}} >
                     <div>
                       <a
                         target="_blank"
@@ -77,7 +77,7 @@ class Game extends Component {
                         High
                     </button>
                   </div>
-                  <div>
+                  <div style={{backgroundColor :'#0CADA7'}}>
                     {!this.props.balance ? <div id="loader" className="spinner-border float-right" role="status"></div> :
                       <div className="float-right" style={{ width: '220px' }}>
                         <div className="float-left" style={{ height: '17px'}}>

@@ -14,7 +14,7 @@ class GameLoading extends Component {
             <div className="content mr-auto ml-auto">
               <div id="content" className="mt-3">
                 <div className="card mb-4 bg-dark">
-                  <div className="card-body">
+                  <div className="card-body" style={{backgroundColor :'#0CADA7'}}> 
                     <div>
                       <a
                           target="_blank"
