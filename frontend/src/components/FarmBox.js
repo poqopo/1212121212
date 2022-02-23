@@ -6,7 +6,7 @@ const FarmBox = (props) => {
     let PairTokenBalance = Number(window.web3.utils.fromWei(props.PairTokenBalance, 'Ether')).toFixed(2)
     let farmAmountInEth = Number(window.web3.utils.fromWei(props.farmAmount, 'Ether')).toFixed(2)
     let farmRewardDebtInEth = Number(window.web3.utils.fromWei(props.farmRewardDebt, 'Ether')).toFixed(2)
-
+    let farmPendingWMFInEth = Number(window.web3.utils.fromWei(props.farmPendingWMF, 'Ether')).toFixed(2)
     let withdrawAmount = 0;
     let stakeAmount = 0;
     return(
@@ -28,7 +28,7 @@ const FarmBox = (props) => {
                             props.farmHarvest()
                         }}>
                         <div className='label-text'>Earned: </div>
-                        <div>{farmRewardDebtInEth}</div>
+                        <div>{farmPendingWMFInEth}</div>
                         <button type='submit' className="button2">HARVEST</button>
                         </form>
                     </div> 

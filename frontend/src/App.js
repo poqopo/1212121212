@@ -196,20 +196,7 @@ class App extends Component {
     })
   }
 
-  transferTest = () => {
-    this.setState({loading:true})
-      this.state.WUSDToken.methods.transfer('0xb682C6091DEaE7D072b9DF6098218D5c3f438cE8', window.web3.utils.toWei('100'))
-      .send({from:this.state.account})
-      .on('receipt', (receipt => {
-        this.loadBlockchainData()
-        this.setState({loading: false})
-      }))
-      .on('error', err =>{
-        this.loadBlockchainData()
-        this.setState({loading: false})
-        window.alert("Error났당")
-      })
-  }
+
 
   // Game
   onChange(value) {
@@ -371,12 +358,13 @@ class App extends Component {
     let userInfo = await this.state.Farm.methods.userInfo(0, this.state.account).call()
     let farmWMFPerSecond = await this.state.Farm.methods.WMFPerSecond().call()
     let farmInfo = await this.state.Farm.methods.poolInfo(0).call()
+    let farmPendingWMF = await this.state.Farm.methods.pendingWMF(0, this.state.account).call()
     let {lpSupply} = farmInfo
     let farmLPSupply = lpSupply
     const {amount, rewardDebt} = userInfo
     let farmAmount = amount
     let farmRewardDebt = rewardDebt
-    this.setState({farmAmount, farmRewardDebt, farmWMFPerSecond, farmLPSupply})
+    this.setState({farmAmount, farmRewardDebt, farmWMFPerSecond, farmLPSupply, farmPendingWMF})
     this.setState({loading:false})
   }
 
@@ -387,6 +375,7 @@ class App extends Component {
       this.state.Farm.methods.deposit(0, deposit_amount).send({from: this.state.account}).on('receipt', (r2) =>{
         console.log(r2)
         this.loadBlockchainData()
+        this.userInfo()
         this.setState({loading: false})
       })
     })
@@ -397,6 +386,7 @@ class App extends Component {
     this.state.Farm.methods.withdraw(0, withrdaw_amount).send({from: this.state.account}).on('receipt', (r1) => {
       console.log(r1)
       this.loadBlockchainData()
+      this.userInfo()
       this.setState({loading: false})
     })
   }
@@ -406,6 +396,7 @@ class App extends Component {
     this.state.Farm.methods.withdraw(0, 0).send({from: this.state.account}).on('receipt', (r1) => {
       console.log(r1)
       this.loadBlockchainData()
+      this.userInfo()
       this.setState({loading: false})
     })
   }
@@ -501,6 +492,7 @@ class App extends Component {
             PairTokenBalance={this.state.PairTokenBalance}
             farmWMFPerSecond={this.state.farmWMFPerSecond}
             farmLPSupply={this.state.farmLPSupply}
+            farmPendingWMF={this.state.farmPendingWMF}
             farmAmount={this.state.farmAmount}
             farmRewardDebt={this.state.farmRewardDebt}
             farmDeposit={this.farmDeposit}
