@@ -36,7 +36,7 @@ const OtherBoxes = (props) => {
                     onChange={(i)=> minAmount1 = i.target.value}
                     placeholder="0"
                     required/>
-                <button type="submit" className="button" style={{fontSize:'1.2rem'}}>RECOLLATERALIZE</button>
+                <button type="submit" className="button" style={{fontSize:'1.2rem'}} disabled={true}>DISABLED</button>
                 </form>
                 </div>
             </div>
