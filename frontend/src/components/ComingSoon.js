@@ -10,7 +10,7 @@ const ComingSoon = () => {
             justifyContent:'center',
             alignItems:'center',
             fontSize:'3rem',
-           color:'#00c0ba'
+           backgroundColor:'#252525a5'
         }}>
            Coming Soon!
             <div style={{

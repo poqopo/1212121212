@@ -1,97 +1,107 @@
-.box-group {
+.fbox-group {
     display: flex;
     justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+    align-items: flex-start;
     width: 100%;
 	height: 100vh;
 }
-.box {
+#divider {
+	border-top: 4px;
+    width: 100%;
+}
+
+.fbox {
 	display: flex;
 	flex-direction: column;
 	justify-content:flex-start;
 	align-items: center;
-    width: 30%;
-    min-width: 380px;
-    height: 80%;
-    margin: 50px 1.6%;
+    width: 40;
+    min-width: 500px;
+    height: 45%;
+    min-height: 350px;
+    margin: 40px 1.6% 0;
 	background-color: #0CADA7; /**/
 	color: #fff;
 	border-radius: 4px;
 }
-.box1:hover{
-	box-shadow: 12px 12px 2px 1px rgba(0, 128, 133, 0.2);
-}
-.box2:hover{
+
+.fbox2:hover{
 	box-shadow: 0px 12px 2px 6px rgba(0, 128, 133, 0.2);
 }
-.box3:hover{
-	box-shadow: -12px 12px 2px 1px rgba(0, 128, 133, 0.2);
-}
 
-.box2 {
-	height: 90%
-}
-
-.box .title {
+.fbox .title {
 	margin-top: 20px;
 	font-size: 1.5rem;
-}	
+}
 
-.box .form-div{
+.fbox .farmform-div{
 	display: flex;
-	width: 80%;
+	width: 90%;
 	flex-direction: column;
 	align-items: flex-start;
 	margin-top: 20px;
 	font-size: 1.4rem;
 }
-.box form{
-	width: 100%;
-}
-.box .form-text {
+.fbox .form-text {
 	color: #fff;
 	text-align: start;
 }
-.box .form-div input{
-	width: 100%;
+
+.la{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.farm-form{
+    width:100%;
+}
+
+.farm-form .label-text{
+    width: 100px;
+}
+
+.farm-form form{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.fbox .farmform-div input{
+	width: 180px;
 	border: none;
 	font-size: 1.2rem;
 	padding: 5px 8px;
 	margin-top: 5px;
 	border-radius: 2px;
 }
-hr {
-	border-top: 2px;
-}
 
-.button {
+.button2 {
 	-webkit-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
 	-moz-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
 	-ms-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
 	-o-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
 	transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
 	display: block;
-	height: 50px;
-	width: 200px;
-	margin: 30px auto 10px;
+    font-size: 1rem;
+	margin-left: auto;
   	padding: 0.5rem 1rem;
 	background-color: rgba(0, 122, 126, 0.85);
 }
 
-.button {
+.button2 {
 	color: rgba(255, 255, 255, 0.85);
 	border: none;
 	border-radius: 2px;
     font-family: 'Jost';
 }
 
-.button:disabled{
+.button2:disabled{
 	background-color: rgb(148, 148, 148);
 }
 
-.button:hover:enabled {
+.button2:hover:enabled {
 	color: rgba(9, 6, 15, 0.6);
 	box-shadow: rgba(255, 255, 255, 0.959) 0 0px 0px 40px inset;
 }
-

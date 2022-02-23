@@ -12,6 +12,7 @@ const MintBoxes = (props) => {
     let amount3 = 0;
     let minAmount3 = 0;
     return(
+        <>
         <div className='box-group'>
             <div className='box box1'>
                 <div className='title'>DAI to WUSD</div>
@@ -114,6 +115,7 @@ const MintBoxes = (props) => {
                 </div>
             </div>
         </div>
+        </>
     ) 
 }
 

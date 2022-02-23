@@ -10,8 +10,8 @@ import UniswapPairOracle_MDAI_WETH from './abis/UniswapPairOracle_MDAI_WETH.json
 import UniswapPairOracle_WMF_WETH from './abis/UniswapPairOracle_WMF_WETH.json'
 import UniswapPairOracle_WUSD_WETH from './abis/UniswapPairOracle_WUSD_WETH.json'
 import BettingGame from './abis/BettingGame.json'
-import { Home, Pool, ComingSoon } from './components/Pages'
-import { MintBoxes, RedeemBoxes, OtherBoxes } from './components/Boxes'
+import { Home, Pool, ComingSoon, Farm } from './components/Pages'
+import { MintBoxes, RedeemBoxes, OtherBoxes, FarmBox } from './components/Boxes'
 import { Routes, Route } from 'react-router-dom'
 import Navigation from './components/Navigation'
 import Game from './components/Game'
@@ -447,7 +447,7 @@ class App extends Component {
           } />
           <Route path='/pool/redeem' element={
             <Pool
-            heading='Redeem'
+            heading='REDEEM'
             loading={this.state.loading}
             box={<RedeemBoxes collateralRatio={this.state.collateralRatio}/>}
 
@@ -538,7 +538,11 @@ class App extends Component {
           }  
               />
           <Route path='/swap' element={<ComingSoon/>}/>
-          <Route path='/farm' element={<ComingSoon/>}/>
+          <Route path='/farm' element={
+          <Farm heading='FARM' loading={this.state.loading}
+          box={<FarmBox collateralRatio={this.state.collateralRatio}/>}
+          />
+          }/>
           <Route path='/nft' element={<ComingSoon/>}/>
         </Routes>
       </>
