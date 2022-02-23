@@ -131,7 +131,7 @@ class App extends Component {
     } else {
         window.alert('Problem with account or network')
     }
-    }
+  }
 
   onChange(value) {
     this.setState({'amount': value});
