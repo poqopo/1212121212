@@ -1,12 +1,14 @@
 import dice_rolling from '../images/dice_rolling.gif';
 import React, { Component } from 'react';
 import eth from '../images/eth.png';
-
+import { Container } from 'react-bootstrap';
 class GameLoading extends Component {
 
   render() {
     return (
-      <div className="container-fluid mt-5 col-m-4" style={{ maxWidth: '550px' }}>
+      <div className='bg'>
+      <Container>
+      <div className="container-fluid mt col-m-4" style={{ maxWidth: '550px' }}>
         <div className="col-sm">
           <main role="main" className="col-lg-12 text-monospace text-center text-white">
             <div className="content mr-auto ml-auto">
@@ -84,6 +86,8 @@ class GameLoading extends Component {
             </div>
           </main>
         </div>
+      </div>
+      </Container>
       </div>
     );
   }

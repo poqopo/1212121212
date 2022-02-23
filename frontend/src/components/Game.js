@@ -1,23 +1,27 @@
 import React, { Component } from 'react';
-import dice from '../images/dice.mp4';
+import dice from '../images/dice.webp';
 import eth from '../images/eth.png';
+import { Container } from 'react-bootstrap'
+import './css/Game.css'
 class Game extends Component {
 
   render() {
     return (
-      <div className="container-fluid mt-5 col-m-4" style={{ maxWidth: '550px' }}>
+      <div className='bg'>
+        <Container>
+      <div className="container-fluid mt-1 col-m-4" style={{ maxWidth: '550px' }}>
         <div className="col-sm">
           <main role="main" className="col-lg-12 text-monospace text-center text-white">
             <div className="content mr-auto ml-auto">
-              <div id="content" className="mt-3" >
-                <div className="card mb-4 bg-dark border-danger">
+              <div id="content" className="mt" >
+                <div className="card mb-4 bg-dark">
                   <div className="card-body">
                     <div>
                       <a
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <video src={dice} width="225" alt="logo" />
+                        <img src={dice} width="225" alt="logo" />
                       </a>
                     </div>
                     &nbsp;
@@ -104,6 +108,8 @@ class Game extends Component {
             </div>
           </main>
         </div>
+      </div>
+      </Container>
       </div>
     );
   }
