@@ -36,7 +36,7 @@ const FarmBox = (props) => {
                         <form onSubmit={(event) => {
                             event.preventDefault()
                             let amountInEth = window.web3.utils.toWei(stakeAmount.toString(), 'Ether')
-                            props.farmWDeposit(amountInEth)
+                            props.farmDeposit(amountInEth)
                         }}>
                         <div className='label-text'>Amount: </div>
                         <input
