@@ -41,7 +41,7 @@ const FarmBox = (props) => {
                         <div className='label-text'>Amount: </div>
                         <input
                         type="number"
-                        step="10"
+                        step="0.01"
                         min={0}
                         max={PairTokenBalance}
                         onChange={(i) => stakeAmount = i.target.value}
@@ -59,7 +59,7 @@ const FarmBox = (props) => {
                         <div className='label-text'>Amount: </div>
                         <input
                         type="number"
-                        step="10"
+                        step="0.01"
                         min={0}
                         max={farmAmountInEth}
                         onChange={(i) => withdrawAmount = i.target.value}
