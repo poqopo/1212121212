@@ -1,7 +1,7 @@
 import React from 'react'
-import './css/MintBoxes.css'
+import './css/RedeemBoxes.css'
 
-const MintBoxes = (props) => {
+const RedeemBoxes = (props) => {
     //props will be collateral ratio
     console.log(+props.collateralRatio)
     let amount1 = 0;
@@ -14,7 +14,7 @@ const MintBoxes = (props) => {
     return(
         <div className='box-group'>
             <div className='box box1'>
-                <div className='title'>DAI to WUSD</div>
+                <div className='title'>WUSD to DAI</div>
                 <div className='form-div'>
                 <form onSubmit={(event) => {
                 event.preventDefault()
@@ -23,7 +23,7 @@ const MintBoxes = (props) => {
                 console.log(amountInEth)
                 console.log(minAmountIntEth)
               }}>
-                    <div className='form-text'>Amount(DAI): </div>
+                    <div className='form-text'>Amount(WUSD): </div>
                     <input
                     type="number"
                     step="10"
@@ -32,14 +32,14 @@ const MintBoxes = (props) => {
                     placeholder="0"
                     required />
                     <hr/>
-                    <div className='form-text'>Min Receive(WUSD): </div>
+                    <div className='form-text'>Min Receive(DAI): </div>
                     <input type="number"
                     step="10"
                     min={0}
                     onChange={(i)=> minAmount1 = i.target.value}
                     placeholder="0"
                     required/>
-                <button type="submit" className="button" disabled={!(+props.collateralRatio >= 1000000)}>{+props.collateralRatio >= 1000000? 'MINT' : 'DISABLED'}</button>
+                <button type="submit" className="button" disabled={!(+props.collateralRatio === 1000000)}>{+props.collateralRatio === 1000000? 'REDEEM' : 'DISABLED'}</button>
                 </form>
                 </div>
             </div>
@@ -55,36 +55,36 @@ const MintBoxes = (props) => {
                 console.log(MDAIAmountInEth)
                 console.log(minAmountIntEth)
                 }}>
-                    <div className='form-text'>Amount(DAI): </div>
+                    <div className='form-text'>Amount(WUSD): </div>
                     <input
                     type="number"
                     step="10"
                     min={0}
-                    onChange={(i) => amount2mdai = i.target.value}
+                    onChange={(i) => amount2wmf = i.target.value}
                     placeholder="0"
                     required />
-            
-                    <div className='form-text'>Amount(WMF): </div>
+                    <hr/>
+                    <div className='form-text'>Min Receive(DAI): </div>
                     <input type="number"
                     step="10"
                     min={0}
-                    onChange={(i)=> amount2wmf = i.target.value}
+                    onChange={(i)=> amount2mdai = i.target.value}
                     placeholder="0"
                     required/>
-                    <hr/>
-                    <div className='form-text'>Min Receive(WUSD): </div>
+                    <div style={{height:'10px'}}/>
+                    <div className='form-text'>Min Receive(WMF): </div>
                     <input type="number"
                     step="10"
                     min={0}
                     onChange={(i)=> minAmount2 = i.target.value}
                     placeholder="0"
                     required/>
-                <button type="submit" className="button" disabled={!(1000000 > +props.collateralRatio && +props.collateralRatio > 0)}>{(1000000 > +props.collateralRatio && +props.collateralRatio > 0)? 'MINT' : 'DISABLED'}</button>
+                <button type="submit" className="button" disabled={!(1000000 > +props.collateralRatio && +props.collateralRatio > 0)}>{(1000000 > +props.collateralRatio && +props.collateralRatio > 0)? 'REDEEM' : 'DISABLED'}</button>
                 </form>
                 </div>
             </div>
             <div className='box box3'>
-                <div className='title'>WMF to WUSD</div>
+                <div className='title'>WUSD to WMF</div>
                 <div className='form-div'>
                 <form onSubmit={(event) => {
                 event.preventDefault()
@@ -93,7 +93,7 @@ const MintBoxes = (props) => {
                 console.log(amountInEth)
                 console.log(minAmountIntEth)
                 }}>
-                    <div className='form-text'>Amount(WMF): </div>
+                    <div className='form-text'>Amount(WUSD): </div>
                     <input
                     type="number"
                     step="10"
@@ -102,14 +102,14 @@ const MintBoxes = (props) => {
                     placeholder="0"
                     required />
                     <hr/>
-                    <div className='form-text'>Min Receive(WUSD): </div>
+                    <div className='form-text'>Min Receive(WMF): </div>
                     <input type="number"
                     step="10"
                     min={0}
                     onChange={(i)=> minAmount3 = i.target.value}
                     placeholder="0"
                     required/>
-                <button type="submit" className="button" disabled={!(+props.collateralRatio === 0)}>{+props.collateralRatio === 0? 'MINT' : 'DISABLED'}</button>
+                <button type="submit" className="button" disabled={!(+props.collateralRatio === 0)}>{+props.collateralRatio === 0? 'REDEEM' : 'DISABLED'}</button>
                 </form>
                 </div>
             </div>
@@ -117,4 +117,4 @@ const MintBoxes = (props) => {
     ) 
 }
 
-export default MintBoxes
+export default RedeemBoxes
