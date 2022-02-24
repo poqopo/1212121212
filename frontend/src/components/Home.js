@@ -1,39 +1,48 @@
 import React from 'react'
 import './css/Home.css'
+import  farm from '../images/farm.png';
+import game from '../images/game.png';
+import launchpad from '../images/launchpad.png';
+import nft from '../images/nft.png';
+
 const Home = () => {
     return(
-        <div className='home-back'>
-        <div className='home'>
-           <h2 className="hometitle">We Made Future</h2>
+        <div className='bg'>
             <br></br>
             <br></br>
-           <p>위메이드에는 다양한 블록체인 게임들이 있습니다. 하지만 지금은 해당 게임들이 
-               연결되어 있지 않고 각각 개별적으로 운영되고 있습니다. 
-               위메이드가 더욱 많은 유저층을 유입시키고 그 유저들을 놓치지 않으려면 
-               각 게임들을 하나로 묶고 게임 내 및 게임 간 다양한 서비스를 제공할 수 있는 프로토콜이 있어야 합니다. We_Made_Future는 Defi를 토대로 
-               위메이드의 각 게임을 하나로 묶는 프로토콜을 만들고자 합니다.</p>
+            <h2 className='wemadefuture'>WE MADE FUTURE</h2>
             <br></br>
-            <h2>첫째, Defi와 Game은 서로 상호보완적인 관계에 있습니다.</h2>
+            <h2 className='maintitle'>Features</h2>
             <br></br>
-            <p>Defi의 고질적인 문제점은 유동성 보상 코인 가격 하락에 있습니다. 따라서 Defi의 성공 여부는 디플레이션 모델의 설계와 더불어 자금 유입을 어떻게 이루어낼 것인가에 있습니다. 많은 Defi들이 이 부분을 해결하지 못해 실패했지만 이 문제는 Defi와 게임을 합침으로써 이루어 낼 수 있습니다. 게임 및 프로토콜에서 사용되는 Stable coin을 활용하여 DeFi 내에서 디플레이션을 유발시키고, buyback fund를 조성할 수 있습니다. 반대로, Defi를 통해 User에게 추가적인 수익을 창출할 수 있도록 함으로써 Game 내 초기 유저의 유입 등 유저 관리 부분에서 도움을 받을 수 있습니다.</p>
-            <br></br>
-            <h2>둘째, 새로운 개념의 Stable coin 도입은 프로토콜과 게임의 안정성을 더해줍니다.</h2>
-            <br></br>
-            <p>부분적인 알고리즘 스테이블 코인은 UST와 같이 알고리즘 기반으로 동작하나 담보비율이 있어 가격의 하한선을 정해줍니다. 만약 담보비율이 95%라면, 프로토콜이 발행하는 Stablecoin 1$중 0.95$는 USDC를 담보로 하고 있는 것입니다. 이는 프로토콜의 스테이블 코인의 안정성을 높여 유저들로 하여금 프로토콜을 더욱 신뢰할 수 있게 만들며 유동성 공급 보상 코인의 가격 유지에도 도움을 주어 전반적인 프로토콜에 안정성을 더해줍니다.</p>
+                <div className='imgbox'>
+                    <div className='farm'>
+                        <img className='farmimg' src={farm}></img>
+                        <h5>Farm</h5>
+                        <br></br>
+                        <p>이자농사로 당신의 자산을 불려보세요!</p>
+                    </div>
+                    <div className='game'>
+                        <img className='gameimg' src={game}></img>
+                        <h5>P2E</h5>
+                        <br></br>
+                        <p>다양한 미니게임을 플레이하여 코인,NFT를 획득해보세요!</p>
+                    </div>
+                    <div className='nft'>
+                        <img className='nftimg'src={nft}></img>
+                        <h5>NFT marketplace</h5>
+                        <br></br>
+                        <p>Game,Launchpad를 통해 얻은 다양한 NFT를 마켓플레이스를 통해 거래해보세요!</p>
+                    </div>
+                    <div className='launchpad'>
+                        <img className='launchpadimg'src={launchpad}></img>
+                        <h5>Launchpad</h5>
+                        <br></br>
+                        <p>WMF를 스테이킹하여 앞으로 나올 게임의 코인,NFT를 얻어보세요!</p>
+                    </div>
+                    
+                </div>
+        
 
-            <br></br>
-            <h2>셋째, P2E miniGame은 유저에게 추가적인 수익성을 제공합니다.</h2>
-            <br></br>
-            <p>최근 P2E 게임이 주목을 받으면서 괄목할만한 성장을 이루어냈지만, 수익성이 비교적 떨어지는 게임들의 경우 큰 주목을 받지 못하였습니다. 하지만 장기적으로 게임이 진정 성공하려면 게임성이 높아야 한다고 생각하기에 저희는 그런 게임에 주목하고자 합니다. 수익성이 부족한 게임들에 Defi와 P2E minigame을 통해 추가적인 수익성을 제공한다면, 게임성을 보고 온 유저와 돈을 벌기 위해 온 투자자로서의 유저들을 모두 붙잡을 수 있을 것입니다. 궁극적으로는 P2E minigame으로 Defi와 Game을 연결하고, Game과 Game을 연결해 하나로 통합하도록 하는 것이 프로토콜이 추구하는 방향입니다.</p>
-
-            <br></br>
-            <h2>넷째, 모든 것이 통합되어야 합니다.</h2>
-            <br></br>
-            <p>블록체인 게임을 하나로 묶는 프로토콜을 만들 것이기 때문에 각 게임 및 minigame에서 나오는 NFT들을 모아 거래할 수 있게 해주는 NFT marketplace가 필요합니다. 게임은 게임대로 토큰 거래나 NFT 거래는 다른 곳에서 해야 한다면, 유저 입장에서 여러 프로토콜을 옮겨 다녀야 해서 번거롭고 어려울 것입니다. 따라서 토큰 거래, Launchpad, NFT marketplace를 통합한 프로토콜을 도입할 필요가 있습니다. 이때, 프로토콜에서 나온 수익으로 WMF를 소각 및 바이백하는 방식을 도입하여 WMF의 가격 하락을 방지한다면, 기존에 Defi에서 해결해내지 못한 숙제를 해결할 수 있습니다.</p>
-            <br></br>
-            <br></br>
-            <br></br>
-        </div>
         </div>
     ) 
 }

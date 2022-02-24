@@ -4,15 +4,80 @@
     padding-top: 50px;
 
 }
-.home-back{
-    margin: 0;
-    width: 100%;
-    background: linear-gradient(to bottom right, #ffffff, #f6fffe);
+.bg {
+	/* background-color: #292929; */
+	/* background: repeating-linear-gradient(
+		30deg,
+		#292929,
+		#292929 30px,
+		#303030 30px,
+		#303030 60px
+	); */
+	background: linear-gradient(to bottom right, #292929, #0e504e);
+	height: 120%
+}
+.wemadefuture{
+    text-align: center;
+    font-size:40px;
+	color: #27e2dc;
 
 }
-.hometitle{
-    font-size:50px;
+.maintitle{
+    font-size:30px;
 	color: #27e2dc;
     text-align: center;
 }
-
+.imgbox{
+    width: 100%;
+    justify-content: space-between;
+    display: flex;
+}
+.farmimg{
+    filter:invert(100%);
+    height:75px;
+    width:75px;
+}
+.launchpadimg{
+    filter:invert(100%);
+    height:75px;
+    width:75px;
+}
+.nftimg{
+    filter:invert(100%);
+    margin-left:20%;
+    height:75px;
+    width:75px;
+}
+.gameimg{
+    filter:invert(100%);
+    height:75px;
+    width:75px;
+}
+.farm{
+    display: flex flexdirection column;
+    Justify-content: center;
+    margin-left: 10%;
+    margin-right:5%;
+}
+.launchpad{
+    display: flex flexdirection column;
+    margin-right:10%;
+    Justify-content: center;
+}
+.nft{
+    display: flex flexdirection column;
+    Justify-content: center;
+    margin-right:5%;
+}
+.game{
+    display: flex flexdirection column;
+    Justify-content: center;
+    margin-right:5%;
+}
+h5{
+    text-align: center;
+    color:#27e2dc;
+}
+p{
+    color:#27e2dc;
+}
