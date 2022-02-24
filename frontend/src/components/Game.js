@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import dice from '../images/dice.webp';
-import eth from '../images/eth.png';
+import eth from '../images/Symbol_Circle.png';
 import { Container } from 'react-bootstrap'
 import './css/Game.css'
 class Game extends Component {
@@ -37,7 +37,7 @@ class Game extends Component {
                       />
                       <div className="input-group-append">
                         <div className="input-group-text">
-                          <img src={eth} height="20" alt=""/>&nbsp;<b>WMF</b>
+                          <img src={eth} width="20" alt=""/>&nbsp;<b>WMF</b>
                         </div>
                       </div>
                     </div>
@@ -80,25 +80,25 @@ class Game extends Component {
                   <div style={{backgroundColor :'#0CADA7', borderRadius:'0 0 10px 10px', fontSize:'1.2rem', display:'flex', justifyContent:'center', paddingBottom:'20px'}}>
                     {!this.props.balance ? <div id="loader" className="spinner-border float-right" role="status"></div> :
                       <div className="float-right" style={{ width: '220px' }}>
-                        <div className="float-left" style={{ height: '17px'}}>
+                        <div className="float-left" >
                           <b>MaxBet&nbsp;</b>
                         </div>
                         <div className="float-right" style={{ height: '17px' }}>
-                          {Number(this.props.web3.utils.fromWei((this.props.maxBet).toString())).toFixed(5)} <b>WMF&nbsp;</b>
+                          {Number(this.props.web3.utils.fromWei((this.props.maxBet).toString())).toFixed(5)} WMF
                         </div>                      
                         <br></br>
-                        <div className="float-left" style={{ height: '17px' }}>
+                        <div className="float-left">
                           <b>MinBet</b>&nbsp;
                         </div>
                         <div className="float-right" style={{ height: '17px' }}>
-                          {Number(this.props.web3.utils.fromWei((this.props.minBet).toString())).toFixed(5)} <b>WMF&nbsp;</b>
+                          {Number(this.props.web3.utils.fromWei((this.props.minBet).toString())).toFixed(5)} WMF
                         </div>
                         <br></br>
                         <div className="float-left">
                           <b>Balance&nbsp;</b>
                         </div>
                         <div className="float-right">
-                          {Number(this.props.web3.utils.fromWei((this.props.balance).toString())).toFixed(5)} <b>WMF&nbsp;</b>
+                          {Number(this.props.web3.utils.fromWei((this.props.balance).toString())).toFixed(5)} WMF
                         </div>
                       </div>
                     }

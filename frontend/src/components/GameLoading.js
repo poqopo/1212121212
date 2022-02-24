@@ -1,6 +1,6 @@
 import dice_rolling from '../images/dice_rolling.gif';
 import React, { Component } from 'react';
-import eth from '../images/eth.png';
+import eth from '../images/Symbol_Circle.png';
 import { Container } from 'react-bootstrap';
 class GameLoading extends Component {
 
@@ -29,12 +29,12 @@ class GameLoading extends Component {
                           id="disabledInput"
                           type="text"
                           className="form-control form-control-md"
-                          placeholder="rolling..."
+                          placeholder="loading..."
                           disabled
                         />
                         <div className="input-group-append">
                           <div className="input-group-text">
-                            <img src={eth} height="20" alt=""/>&nbsp;<b>WMF</b>
+                            <img src={eth} width="20" alt=""/>&nbsp;<b>WMF</b>
                           </div>
                         </div>
                     </div>

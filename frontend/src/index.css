@@ -2,12 +2,26 @@
   font-family: 'Jost';
   font-weight: normal;
   src: url("./fonts/Jost-Regular.ttf")
+  /* src: url("./fonts/InfinitySansR-Regular.ttf") */
 }
 
 @font-face {
   font-family: 'Jost';
   font-weight: bold;
   src: url("./fonts/Jost-Bold.ttf")
+  /* src: url("./fonts/InfinitySans-Bold.ttf") */
+}
+
+@font-face {
+  font-family: 'WMF';
+  font-weight: normal;
+  src: url("./fonts/InfinitySansR-Regular.ttf")
+}
+
+@font-face {
+  font-family: 'WMF';
+  font-weight: bold;
+  src: url("./fonts/InfinitySans-Bold.ttf")
 }
 
 @font-face {

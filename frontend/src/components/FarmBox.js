@@ -16,10 +16,10 @@ const FarmBox = (props) => {
                 <div className='title'>WMF-WETH PAIR</div>
                 <div className='farmform-div'>
                     <div className='form-text la'>
-                        <div>Staking:</div> <div>{farmAmountInEth}</div>
+                        <div>Staking:</div> <div><b>{farmAmountInEth}</b></div>
                         </div>
                     <div className='form-text la'>
-                    <div>APR:</div> <div>{(((+props.farmWMFPerSecond*3600*24* +props.WMFTokenPrice)/(+props.farmLPSupply*30000000))*36500).toFixed(2)} %</div>
+                    <div>APR:</div> <div><b>{(((+props.farmWMFPerSecond*3600*24* +props.WMFTokenPrice)/(+props.farmLPSupply*30000000))*36500).toFixed(2)}</b> %</div>
                     </div>
                     <hr id="divider"/>
                     <div className='form-text farm-form'>
@@ -28,7 +28,7 @@ const FarmBox = (props) => {
                             props.farmHarvest()
                         }}>
                         <div className='label-text'>Earned: </div>
-                        <div>{farmPendingWMFInEth}</div>
+                        <div><b>{farmPendingWMFInEth}</b></div>
                         <button type='submit' className="button2">HARVEST</button>
                         </form>
                     </div> 
