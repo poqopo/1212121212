@@ -58,6 +58,13 @@ class App extends Component {
     this.setState({ account: accounts[0] })
 
     const networkId = await web3.eth.net.getId()
+    this.setState({networkId})
+
+    if(networkId!=4){
+      this.setState({loading:true})
+      window.alert('Network Error: Wrong Network! Please connect to Rinkeby Testnet.')
+      throw 'Network Error: Wrong Network! Needs to be Rinkeby Testnet.'
+    }
 
     // Load WUSDStablecoin
     const WUSDStablecoinData = WUSDStablecoin.networks[networkId]
@@ -376,7 +383,7 @@ class App extends Component {
     let farmAmount = amount
     let farmRewardDebt = rewardDebt
     this.setState({farmAmount, farmRewardDebt, farmWMFPerSecond, farmLPSupply, farmPendingWMF})
-    this.setState({loading:false})
+    if(this.state.networkId ==4) this.setState({loading:false})
   }
 
   farmDeposit = (deposit_amount) => {

@@ -4,8 +4,8 @@ import logo from '../images/Symbol_Circle.png'
 
 
 function Navigation(props){
-    let wmfBalance = props.WMFTokenBalance === '-'? '----': Number(window.web3.utils.fromWei(props.WMFTokenBalance, 'Ether')).toFixed(2).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
-    let wusdBalance = props.WUSDTokenBalance === '-'? '----': Number(window.web3.utils.fromWei(props.WUSDTokenBalance, 'Ether')).toFixed(2).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+    let wmfBalance = props.WMFTokenBalance === '-'? '----': Number(window.web3.utils.fromWei(props.WMFTokenBalance, 'Ether')).toFixed(0).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+    let wusdBalance = props.WUSDTokenBalance === '-'? '----': Number(window.web3.utils.fromWei(props.WUSDTokenBalance, 'Ether')).toFixed(0).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
     return(
     <div className="Navigation">
         <Navbar bg="dark" variant="dark" style={{boxShadow:'0px 1px 6px 3px #252525a6'}}>
