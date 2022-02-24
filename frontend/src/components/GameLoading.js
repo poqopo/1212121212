@@ -7,7 +7,6 @@ class GameLoading extends Component {
   render() {
     return (
       <div className='bgs'>
-      <Container>
       <div className="container-fluid mt col-m-4" style={{ maxWidth: '550px' }}>
         <div className="col-sm">
           <main role="main" className="col-lg-12 text-monospace text-center text-white">
@@ -61,7 +60,6 @@ class GameLoading extends Component {
           </main>
         </div>
       </div>
-      </Container>
       </div>
     );
   }

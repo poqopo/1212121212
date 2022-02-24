@@ -10,7 +10,7 @@ const ComingSoon = () => {
             justifyContent:'center',
             alignItems:'center',
             fontSize:'3rem',
-            background:'linear-gradient(to bottom right, #ffffff, #f6fffe)'
+            background:'linear-gradient(to bottom right, #ffffff, #0e504e)'
         }}>
            Coming Soon!
             <div style={{

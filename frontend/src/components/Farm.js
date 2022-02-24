@@ -34,7 +34,7 @@ class Farm extends Component {
       </div>
     }
     return (
-      <div className='bg'>
+      <div className='fbg'>
         <Container>
           {content}
         </Container>

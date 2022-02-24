@@ -20,7 +20,7 @@ function Navigation(props){
                         <NavDropdown.Item href="/pool/others">Others</NavDropdown.Item>
                     </NavDropdown>
                     <Nav.Link href="/game" active={window.location.pathname.includes('/game')}>P2E</Nav.Link>
-                    <Nav.Link href="/nft" active={window.location.pathname.includes('/nft')}>NFT market place</Nav.Link>
+                    <Nav.Link href="/nft" active={window.location.pathname.includes('/nft')}>NFT Marketplace</Nav.Link>
                 </Nav>
                 <div style={{color:'white'}}> {props.loading? '---':`WMF : ${wmfBalance} | WUSD : ${wusdBalance}`}</div>
             </Container>
