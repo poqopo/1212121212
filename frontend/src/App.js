@@ -169,7 +169,6 @@ class App extends Component {
       const bettingGameMaxBet = await this.state.WMFToken.methods.balanceOf(BettingGameData.address).call()
       const bettingGameMinBet = 1e18
       this.setState({ BettingGameContract, bettingGameMaxBet, bettingGameMinBet})
-      console.log(this.state.bettingGameMaxBet)
     } else {
       window.alert('BettingGame contract not deployed to detected network.')
     }
@@ -189,15 +188,6 @@ class App extends Component {
     }
   }
 
-  // Test Functions
-  testFunc = () => {
-    this.state.WUSDToken.methods.global_collateral_ratio().call().then((ratio) => {
-      console.log(ratio)
-    })
-  }
-
-
-
   // Game
   onChange(value) {
     this.setState({'amount': value});
@@ -210,15 +200,14 @@ class App extends Component {
 
       //Send bet to the contract and wait for the verdict
       this.state.WMFToken.methods.approve(this.state.BettingGameContract._address, amount).send({ from: this.state.account })
-      .on('transactionHash', (hash) => {console.log(hash)})
       .on('receipt', (r1) => {
-        console.log(r1)
+        
         this.state.BettingGameContract.methods.game(amount, bet, randomSeed).send({from: this.state.account})
         .on('transactionHash', (hash) => {
           this.setState({ loading: true })
           console.log(hash)})
         .on('r2', (r2) => {
-          console.log(r2)
+          
           console.log("send success") 
          
           this.state.BettingGameContract.events.Result({}, async (error, event) => {
@@ -248,10 +237,12 @@ class App extends Component {
 
   mintAlgorithmicWUSD = (WMF_amount, WUSD_out_min) => {
     this.setState({loading: true})
-    this.state.WMFToken.methods.approve(this.state.Pool._address, WMF_amount).send({from: this.state.account}).on('receipt', (r1)=>{
-      console.log(r1)
-      this.state.Pool.methods.mint1t1WUSD(WMF_amount, WUSD_out_min).send({from: this.state.account}).on('receipt', (r2) => {
-        console.log(r2)
+    this.state.WMFToken.methods.approve(this.state.Pool._address, WMF_amount).send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+    .on('receipt', (r1)=>{
+      
+      this.state.Pool.methods.mint1t1WUSD(WMF_amount, WUSD_out_min).send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+      .on('receipt', (r2) => {
+        
         this.loadBlockchainData()
         this.setState({loading: false})
       })
@@ -260,10 +251,12 @@ class App extends Component {
 
   mint1t1WUSD = (MockDai_amount, WUSD_out_min) => {
     this.setState({loading: true})
-    this.state.WMFToken.methods.approve(this.state.Pool._address, MockDai_amount).send({from: this.state.account}).on('receipt', (r1)=>{
-      console.log(r1)
-      this.state.Pool.methods.mint1t1WUSD(MockDai_amount, WUSD_out_min).send({from: this.state.account}).on('receipt', (r2) => {
-        console.log(r2)
+    this.state.WMFToken.methods.approve(this.state.Pool._address, MockDai_amount).send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+    .on('receipt', (r1)=>{
+      
+      this.state.Pool.methods.mint1t1WUSD(MockDai_amount, WUSD_out_min).send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+      .on('receipt', (r2) => {
+        
         this.loadBlockchainData()
         this.setState({loading: false})
       })
@@ -282,9 +275,10 @@ class App extends Component {
       console.log('error')
     })
     .on('receipt', (r1) => {
-      this.state.WMFToken.methods.approve(this.state.Pool._address, WMF_amount).send({from: this.state.account}).on('receipt', (r2) =>{
+      this.state.WMFToken.methods.approve(this.state.Pool._address, WMF_amount).send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+      .on('receipt', (r2) =>{
         this.state.Pool.methods.mintFractionalWUSD(MockDai_amount, WMF_amount, WUSD_out_min).send({from: this.state.account})
-        .on('transactionHash', (hash) => {console.log(hash)})
+        .on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
         .on('receipt', (receipt) => {
           this.loadBlockchainData()
           this.setState({loading: false})
@@ -295,10 +289,12 @@ class App extends Component {
 
   redeem1t1WUSD = (WUSD_amount, MockDai_out_min) => {
     this.setState({loading:true})
-    this.state.WUSDToken.methods.approve(this.state.Pool._address, WUSD_amount).send({from: this.state.account}).on('receipt', (r1) => {
-      console.log(r1)
-      this.state.Pool.methods.redeem1t1WUSD(WUSD_amount, MockDai_out_min).send({from: this.state.account}).on('receipt', (r2) => {
-        console.log(r2)
+    this.state.WUSDToken.methods.approve(this.state.Pool._address, WUSD_amount).send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+    .on('receipt', (r1) => {
+      
+      this.state.Pool.methods.redeem1t1WUSD(WUSD_amount, MockDai_out_min).send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+      .on('receipt', (r2) => {
+        
         this.loadBlockchainData()
         this.setState({loading: false})
       })
@@ -307,22 +303,33 @@ class App extends Component {
 
   redeemFractionalWUSD = (WUSD_amount, WMF_out_min, MockDai_out_min) => {
     this.setState({loading:true})
-    this.state.WUSDToken.methods.approve(this.state.Pool._address, WUSD_amount).send({from: this.state.account}).on('receipt', (r1) => {
-      console.log(r1)
-      this.state.Pool.methods.redeemFractionalWUSD(WUSD_amount, WMF_out_min, MockDai_out_min).send({from: this.state.account}).on('receipt', (r2) => {
-        console.log(r2)
+    this.state.WUSDToken.methods.approve(this.state.Pool._address, WUSD_amount).send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+    .on('receipt', (r1) => {
+      this.state.Pool.methods.redeemFractionalWUSD(WUSD_amount, WMF_out_min, MockDai_out_min).send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+      .on('receipt', (r2) => {
+        
         this.loadBlockchainData()
         this.setState({loading: false})
       })
     })
   }
+  collectRedemption = () => {
+    this.setState({loading:true})
+    this.state.Pool.methods.collectRedemption().send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+    .on('receipt', ()=>{
+      this.loadBlockchainData()
+        this.setState({loading: false})
+  })
+}
 
   redeemAlgorithmicWUSD = (WUSD_amount, WMF_out_min) => {
     this.setState({loading:true})
-    this.state.WUSDToken.methods.approve(this.state.Pool._address, WUSD_amount).send({from: this.state.account}).on('receipt', (r1) => {
-      console.log(r1)
-      this.state.Pool.methods.redeemAlgorithmicWUSD(WUSD_amount, WMF_out_min).send({from: this.state.account}).on('receipt', (r2) => {
-        console.log(r2)
+    this.state.WUSDToken.methods.approve(this.state.Pool._address, WUSD_amount).send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+    .on('receipt', (r1) => {
+      
+      this.state.Pool.methods.redeemAlgorithmicWUSD(WUSD_amount, WMF_out_min).send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+      .on('receipt', (r2) => {
+        
         this.loadBlockchainData()
         this.setState({loading: false})
       })
@@ -331,10 +338,12 @@ class App extends Component {
 
   recollateralizeWUSD = (MockDai_amount, WMF_out_min) => {
     this.setState({loading:true})
-    this.state.MockDaiToken.methods.approve(this.state.Pool._address, MockDai_amount).send({from: this.state.account}).on('receipt', (r1) => {
-      console.log(r1)
-      this.state.Pool.methods.recollateralizeWUSD(MockDai_amount, WMF_out_min).send({from: this.state.account}).on('receipt', (r2) => {
-        console.log(r2)
+    this.state.MockDaiToken.methods.approve(this.state.Pool._address, MockDai_amount).send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+    .on('receipt', (r1) => {
+      
+      this.state.Pool.methods.recollateralizeWUSD(MockDai_amount, WMF_out_min).send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+      .on('receipt', (r2) => {
+        
         this.loadBlockchainData()
         this.setState({loading: false})
       })
@@ -343,10 +352,12 @@ class App extends Component {
 
   buyBackWMF = (WMF_amount, MockDai_out_min) => {
     this.setState({loading:true})
-    this.state.WMFToken.methods.approve(this.state.Pool._address, WMF_amount).send({from: this.state.account}).on('receipt', (r1) => {
-      console.log(r1)
-      this.state.Pool.methods.recollateralizeWUSD(WMF_amount, MockDai_out_min).send({from: this.state.account}).on('receipt', (r2) => {
-        console.log(r2)
+    this.state.WMFToken.methods.approve(this.state.Pool._address, WMF_amount).send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+    .on('receipt', (r1) => {
+      
+      this.state.Pool.methods.recollateralizeWUSD(WMF_amount, MockDai_out_min).send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+      .on('receipt', (r2) => {
+        
         this.loadBlockchainData()
         this.setState({loading: false})
       })
@@ -370,10 +381,12 @@ class App extends Component {
 
   farmDeposit = (deposit_amount) => {
     this.setState({loading:true})
-    this.state.WMF_WETH_Pair.methods.approve(this.state.Farm._address, deposit_amount).send({from: this.state.account}).on('receipt', (r1)=>{
-      console.log(r1)
-      this.state.Farm.methods.deposit(0, deposit_amount).send({from: this.state.account}).on('receipt', (r2) =>{
-        console.log(r2)
+    this.state.WMF_WETH_Pair.methods.approve(this.state.Farm._address, deposit_amount).send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+    .on('receipt', (r1)=>{
+      
+      this.state.Farm.methods.deposit(0, deposit_amount).send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+      .on('receipt', (r2) =>{
+        
         this.loadBlockchainData()
         this.userInfo()
         this.setState({loading: false})
@@ -383,8 +396,9 @@ class App extends Component {
 
   farmWithdraw = (withrdaw_amount) => {
     this.setState({loading:true})
-    this.state.Farm.methods.withdraw(0, withrdaw_amount).send({from: this.state.account}).on('receipt', (r1) => {
-      console.log(r1)
+    this.state.Farm.methods.withdraw(0, withrdaw_amount).send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+    .on('receipt', (r1) => {
+      
       this.loadBlockchainData()
       this.userInfo()
       this.setState({loading: false})
@@ -393,8 +407,9 @@ class App extends Component {
 
   farmHarvest = () => {
     this.setState({loading:true})
-    this.state.Farm.methods.withdraw(0, 0).send({from: this.state.account}).on('receipt', (r1) => {
-      console.log(r1)
+    this.state.Farm.methods.withdraw(0, 0).send({from: this.state.account}).on('error', (err) => {console.log(err); this.setState({loading:false}); window.alert('Transanction Error! Please try again.')})
+    .on('receipt', (r1) => {
+      
       this.loadBlockchainData()
       this.userInfo()
       this.setState({loading: false})
@@ -444,6 +459,7 @@ class App extends Component {
               redeem1t1WUSD={this.redeem1t1WUSD}
               redeemAlgorithmicWUSD={this.redeemAlgorithmicWUSD}
               redeemFractionalWUSD={this.redeemFractionalWUSD}
+              collectRedemption={this.collectRedemption}
               />}          
             />
           } />  

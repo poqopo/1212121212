@@ -43,7 +43,7 @@ const RedeemBoxes = (props) => {
                 </form>
                 </div>
             </div>
-            <div className='box box2'>
+            <div style={{height:'100%'}}className='box box2'>
                 <div className='title'>Fractional (DAI & WMF)</div>
                 <div className='form-div'>
                 <form onSubmit={(event) => {
@@ -80,6 +80,7 @@ const RedeemBoxes = (props) => {
                     required/>
                 <button type="submit" className="button" disabled={!(1000000 > +props.collateralRatio && +props.collateralRatio > 0)}>{(1000000 > +props.collateralRatio && +props.collateralRatio > 0)? 'REDEEM' : 'DISABLED'}</button>
                 </form>
+                <button className = "button" style={{fontSize:'1rem', marginTop:'0'}} onClick={(e)=>{props.collectRedemption()}}>COLLECT REDEMPTION</button>
                 </div>
             </div>
             <div className='box box3'>
